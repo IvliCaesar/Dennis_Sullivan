@@ -1,0 +1,1954 @@
+% sullivan-geometric-topology.tex
+%
+% Localization, periodicity and Galois symmetry.
+% An account of Sullivan's geometric topology.
+%
+% Engine: pdfLaTeX, three runs. No BibTeX.
+
+\documentclass[11pt]{amsart}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1.15in]{geometry}
+\usepackage{xcolor}
+\usepackage{tikz-cd}
+\usepackage{enumitem}
+\usepackage[colorlinks=true,linkcolor=blue!50!black,citecolor=green!40!black,urlcolor=blue!60!black]{hyperref}
+
+\setlength{\emergencystretch}{3em}
+\setlist{nosep}
+
+% ─── Theorem environments ────────────────────────────────────────────────────
+\theoremstyle{plain}
+\newtheorem{theoremA}{Theorem}
+\renewcommand{\thetheoremA}{\Alph{theoremA}}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem*{conjecture*}{Conjecture}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{problem}[theorem]{Problem}
+\numberwithin{equation}{section}
+
+% ─── Notation ────────────────────────────────────────────────────────────────
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Zhat}{\widehat{\mathbb{Z}}}
+\newcommand{\Af}{\mathbb{A}_f}
+\newcommand{\Qbar}{\overline{\mathbb{Q}}}
+\newcommand{\Zl}{\mathbb{Z}_{(\ell)}}
+\newcommand{\Zp}{\mathbb{Z}_{(p)}}
+\newcommand{\CP}{\mathbb{C}P}
+\newcommand{\RP}{\mathbb{R}P}
+\newcommand{\HP}{\mathbb{H}P}
+\newcommand{\KO}{\mathit{KO}}
+\newcommand{\Ktop}{K_{\mathrm{Top}}}
+\newcommand{\hX}{\widehat{X}}
+\newcommand{\units}{^{\times}}
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\Ext}{Ext}
+\DeclareMathOperator{\Tor}{Tor}
+\DeclareMathOperator{\Aut}{Aut}
+\DeclareMathOperator{\Map}{Map}
+\DeclareMathOperator{\sign}{sign}
+\DeclareMathOperator{\ch}{ch}
+\DeclareMathOperator{\ph}{ph}
+\DeclareMathOperator{\holim}{holim}
+\DeclareMathOperator{\hocolim}{hocolim}
+\DeclareMathOperator{\colim}{colim}
+\DeclareMathOperator{\Spec}{Spec}
+\DeclareMathOperator{\GL}{GL}
+\DeclareMathOperator{\SO}{SO}
+\DeclareMathOperator{\Ord}{ord}
+
+\title[Localization, periodicity and Galois symmetry]{Localization, periodicity and Galois symmetry:\\ an account of Sullivan's geometric topology}
+\author{C\'esar Galindo}
+\address{Facultad de Empresariales, Universidad Panamericana, Ciudad de M\'exico, M\'exico}
+\email{jcgalindo@up.edu.mx}
+\subjclass[2020]{55P60, 55R25, 14F35, 19L20, 57Q50, 57R67, 55P91}
+\keywords{Localization and completion of spaces; arithmetic square; spherical fibrations; \'etale homotopy type; Galois symmetry; Adams conjecture; $K$-theory orientation; block bundles; normal invariants; homotopy fixed points}
+
+\begin{document}
+
+\begin{abstract}
+A simply connected space of finite type is the homotopy pullback of its rational type and of its profinite completion over its adelic type, and the profinite completion splits as the product of its $p$-adic completions.
+The $p$-adic pieces carry symmetry that has no counterpart over $\Z$: the units $\Zhat_p\units$ act on the classifying spaces of $p$-adic spherical fibrations, the Galois group of $\Qbar$ over $\Q$ acts on the completed Grassmannians through their \'etale homotopy type, and at odd primes the transversality invariants of piecewise linear bundles define a canonical orientation in real $K$-theory that transports this action to topological bundles.
+We give a detailed account of this theory, due to Sullivan, with proofs of its main results: the construction of localization and profinite completion of homotopy types and the arithmetic square; the classification of local and $p$-adic spherical fibrations and their symmetry; the \'etale construction of the Galois action, the Adams conjecture in its unstable form and the self-maps of $\HP^\infty$; the characterization of $\KO\otimes\Z[1/2]$ by geometric cocycles, the $K$-theory orientation of block bundles and the identification $G/PL\simeq BO$ at odd primes; and the decomposition of profinite topological bundle theory under the Galois action, in which a crossed homomorphism from $\Zhat\units$ to the units of $K$-theory classifies the topological type and its cohomology class classifies the fibre homotopy type.
+We also treat the homotopy fixed point description of the real points of a real algebraic variety and the formal manifold categories over $\Q$, $\Zhat$ and the finite adeles.
+\end{abstract}
+
+\maketitle
+
+\setcounter{tocdepth}{1}
+\tableofcontents
+
+% ═════════════════════════════════════════════════════════════════════════════
+\section*{Introduction}
+% ═════════════════════════════════════════════════════════════════════════════
+
+The integers are the fibre product of the rationals and of the profinite integers $\Zhat=\prod_p\Zhat_p$ over the ring of finite adeles $\Af=\Q\otimes\Zhat$.
+The subject of this paper is the extension of this statement to homotopy types, and the use of the extra symmetry that appears on the $p$-adic side to study vector bundles, spherical fibrations, piecewise linear and topological bundles and, through surgery, manifolds.
+The theory is due to Sullivan~\cite{SulMIT}, and parts of it were published in~\cite{SulICM,SulGenetics,SulPeriodicity,MS74}.
+
+The starting point is the classification of high dimensional simply connected manifolds within a homotopy type.
+By the surgery theory of Browder and Novikov~\cite{Browder,Novikov}, and Sullivan's reformulation of it~\cite{SulHaupt}, the manifolds homotopy equivalent to a given one are governed by the normal invariants $[M,G/PL]$, and the homotopy groups of $G/PL$ are $0,\Z/2,0,\Z$, repeated with period four.
+At the prime $2$ the space $G/PL$ is almost a product of Eilenberg--MacLane spaces, and at odd primes it is the classifying space of real $K$-theory.
+The prime $2$ and the odd primes have to be treated separately, and this is the first motivation for localization.
+The second comes from the conjecture of Adams on vector bundles related by the operations $\psi^k$~\cite{AdamsJ1}: the conjecture involves one relation for each prime, each relation carrying information at all the other primes, and Sullivan's proof replaces the operations $\psi^k$ by a group of symmetries of the profinite completion of the classifying spaces, the Galois group of the field generated by the roots of unity.
+
+We state the main results.
+A space is \emph{simple} if it is connected, has the homotopy type of a CW complex, and its fundamental group is abelian and acts trivially on the homotopy and homology of its universal cover.
+For a set of primes $\ell$ write $\Zl\subseteq\Q$ for the integers localized at $\ell$, so that $\Z_{(\emptyset)}=\Q$ and $\Z_{(\text{all})}=\Z$.
+
+\begin{theoremA}[Localization and fracture]\label{thm:A}
+Let $\ell$ be a set of primes.
+Every simple space $X$ has a localization $X\to X_{(\ell)}$, universal among maps to spaces with $\Zl$-local homotopy groups, and a map of simple spaces is a localization if and only if it induces $\pi_*X\otimes\Zl\cong\pi_*X_{(\ell)}$, if and only if it induces $\widetilde H_*(X;\Z)\otimes\Zl\cong\widetilde H_*(X_{(\ell)};\Z)$.
+If $X$ is simply connected and its homotopy groups are finitely generated, then the profinite completion $\hX$ is a product $\prod_p\hX_p$ of $p$-adic completions, the rationalization of $\hX$ and the formal completion of $X_{(0)}$ agree as a space $X_{\mathbb A}$ with $\pi_*X_{\mathbb A}\cong\pi_*X\otimes\Af$, and the square
+\[
+\begin{tikzcd}
+X\arrow[r]\arrow[d] & \hX\arrow[d]\\
+X_{(0)}\arrow[r] & X_{\mathbb A}
+\end{tikzcd}
+\]
+is a homotopy pullback.
+\end{theoremA}
+
+The profinite completion is defined for every connected CW complex as a homotopy type together with a compact Hausdorff topology on the functor $[\,-\,,\hX]$; it is constructed in~\S\ref{sec:completion} by a Brown representability argument in which compactness replaces exactness.
+
+For a set of primes $\ell$, an \emph{$\ell$-adic spherical fibration} of dimension $n-1$ is a fibration whose fibre is the $\ell$-adic completion $\widehat S^{n-1}_\ell$ of the sphere.
+
+\begin{theoremA}[Symmetry of $p$-adic spherical fibrations]\label{thm:B}
+The monoid of self-equivalences of $\widehat S^{n-1}_\ell$ has $\pi_0=\Zhat_\ell\units$.
+The classifying space of oriented $\ell$-adic spherical fibrations is the completion $(BSG_n)^\wedge_\ell$, the group $\Zhat_\ell\units$ acts on it by changing orientations, and the action is trivial in the stable range.
+For an odd prime $p$, the $p$-adic sphere $\widehat S^{2n-1}_p$ is the loop space of a $p$-complete space if and only if $n$ divides $p-1$.
+\end{theoremA}
+
+The last statement gives, for each divisor $n$ of $p-1$, a principal theory of $p$-adic spherical fibrations with fibre $\widehat S^{2n-1}_p$ and classifying space $(K(\Zhat_p,2)_{h\mu_n})^\wedge_p$, where the group $\mu_n$ of $n$-th roots of unity in $\Zhat_p$ acts on $K(\Zhat_p,2)$ through multiplication.
+
+\begin{theoremA}[Galois symmetry and the Adams conjecture]\label{thm:C}
+The absolute Galois group $\Gal(\Qbar/\Q)$ acts on the profinite completions of $BU_n$ and $BO_n$, through their \'etale homotopy types as limits of Grassmannians defined over $\Q$.
+On cohomology the action is given by $c_i\mapsto\chi(\sigma)^ic_i$, $p_i\mapsto\chi(\sigma)^{2i}p_i$ and $e\mapsto\chi(\sigma)^ne$ for the Euler class of $BSO_{2n}$, where $\chi\colon\Gal(\Qbar/\Q)\to\Zhat\units$ is the cyclotomic character.
+On profinite $K$-theory the action factors through $\Zhat\units$, and an integer $k$ acts as the invertible part of the Adams operation $\psi^k$.
+For every $\sigma$ and every $n$ the composite $(BO_n)^\wedge\xrightarrow{\sigma}(BO_n)^\wedge\to(BG_n)^\wedge$ is homotopic to the natural map.
+In particular, for a finite complex $X$ and $x\in\KO(X)$, the element $k^N(\psi^kx-x)$ has trivial image in $J(X)$ for $N$ large.
+\end{theoremA}
+
+The same method gives the homotopy classification of the degrees of self-maps of $\HP^\infty$ (Corollary~\ref{cor:HP}) and the first maps between classifying spaces of compact connected Lie groups that are not induced by homomorphisms.
+
+The next result describes the geometric content of a piecewise linear block bundle at odd primes.
+
+\begin{theoremA}[The $K$-theory orientation]\label{thm:D}
+Let $E\to B$ be an oriented piecewise linear block bundle of fibre dimension $n$ over a finite complex.
+The signatures of the transverse intersections of $\Z/m$-manifolds in $E$ with the zero section, $m$ odd, together with the rational signatures, define a canonical Thom class
+\[
+\Delta_E\in\KO^n_c(E)\otimes\Z[1/2]
+\]
+whose Pontryagin character is $L(E)^{-1}$ times the cohomological Thom class.
+For vector bundles $\Delta_E$ is the class of the signature operator along the fibres.
+At odd primes $G/PL\simeq BO$, and for $n\ge3$ the theory of profinite $PL_n$ bundles is isomorphic to the theory of $\widehat S^{n-1}$-fibrations with a $\widehat{\KO}$-orientation.
+\end{theoremA}
+
+The orientation $\Delta_E$ comes from a characterization of $\KO\otimes\Z[1/2]$ by geometric cocycles: an element of $\widehat{\KO}(X)$ at odd primes is the same as a function assigning a residue modulo $m$ to every smooth $\Z/m$-manifold in $X$, $m$ odd, compatible with bordism and multiplicative for products with closed manifolds through the signature (Theorem~\ref{thm:geomcocycles}).
+
+The Galois group acts on $\widehat{\KO}$, hence on $\widehat{\KO}$-orientations, hence on profinite topological bundles.
+Write $K$, $K^\otimes=1+\widetilde K$ and $\Ktop$ for the profinite theories at odd primes of stable vector bundles, of units in real $K$-theory, and of stable topological bundles.
+For a topological bundle $E$ define $\Theta_E\colon\Zhat\units\to K^\otimes$ by $\Theta_E(\alpha)\cdot\Delta_E=\alpha(\Delta_E)$; it is a continuous crossed homomorphism.
+
+\begin{theoremA}[Galois symmetry of topological bundles]\label{thm:E}
+At odd primes the following hold.
+\begin{enumerate}[label=\textup{(\arabic*)}]
+\item The kernels of the passage from vector bundles, or from topological bundles, to stable spherical fibrations are generated by the differences $x-\alpha(x)$, $\alpha\in\Zhat\units$.
+\item A vector bundle $E$ is topologically trivial if and only if $\Theta_E=1$, and fibre homotopically trivial if and only if $\Theta_E$ is a principal crossed homomorphism.
+Every continuous crossed homomorphism is $\Theta_E$ for some topological bundle $E$, and
+\[
+J_O\cong H^1_d(\Zhat\units;K^\otimes),\qquad J_{\mathrm{Top}}\cong C^1\oplus H^1_d(\Zhat\units;K^\otimes),\qquad \Ktop\cong C^1\oplus Z^1_d(\Zhat\units;K^\otimes),
+\]
+where $C^1$ is the group of bundles whose $K$-theory Thom isomorphism is equivariant.
+\item Distinct stable vector bundles fixed by the torsion of $\Zhat\units$ are topologically distinct.
+\end{enumerate}
+\end{theoremA}
+
+The last theorem concerns real algebraic varieties.
+For a variety $V$ over $\R$, complex conjugation acts on the \'etale homotopy type of $V_\C$, and the \'etale homotopy type of $V$ itself fibres over $\RP^\infty$, the \'etale homotopy type of $\Spec\R$.
+
+\begin{theoremA}[Real points]\label{thm:F}
+A system of real polynomial equations has a real solution if and only if the mod $2$ \'etale cohomology of the real variety it defines is non-zero in infinitely many degrees.
+If the fixed points of every finite dimensional involution are recovered, after $2$-completion, as homotopy fixed points, then the $2$-completion of the space of real points of $V$ is the space of sections of the \'etale realization of $V\to\Spec\R$.
+\end{theoremA}
+
+The hypothesis of the second part is the generalized Sullivan conjecture, proved by Miller, Lannes, Carlsson and Dwyer--Miller--Neisendorfer~\cite{Miller,Lannes,Carlsson,DMN}.
+
+\subsection*{Organization}
+Section~\ref{sec:algebra} collects the algebra of localization and completion, the structure of the $p$-adic units and the arithmetic squares.
+Section~\ref{sec:localization} constructs the localization of simple spaces, and Section~\ref{sec:completion} the profinite and formal completions and the arithmetic square of homotopy types.
+Section~\ref{sec:spherical} treats local and $\ell$-adic spherical fibrations, the inertia of intrinsic stable fibre homotopy types and the $p$-adic spheres that are loop spaces.
+Section~\ref{sec:etale} explains the \'etale homotopy type through Lubkin's nerves of categories of smallest neighbourhoods, constructs the Galois action, proves the Adams conjecture and treats real varieties.
+Section~\ref{sec:geometric} contains the geometric part: block bundles and transversality, the characterization of $K$-theory by geometric cocycles, the $K$-theory orientation, the Galois action on piecewise linear and topological bundles, and the cocycle $\Theta$.
+Section~\ref{sec:formal} describes the formal manifold categories over $\Q$, $\Zhat_p$ and $\Af$, and Section~\ref{sec:further} records the later developments that settled several of the questions raised along the way.
+
+\subsection*{Conventions}
+Spaces are pointed and have the homotopy type of CW complexes.
+For a set of primes $\ell$, $\ell'$ denotes its complement; $\Zhat_\ell=\prod_{p\in\ell}\Zhat_p$, and an $\ell$-group is a finite group whose order is a product of primes in $\ell$.
+For a group or space we write $(-)_{(\ell)}$ for localization at $\ell$, $(-)_{(0)}=(-)_{(\emptyset)}$ for rationalization, $(-)^\wedge_\ell$ for $\ell$-profinite completion and $(-)^\wedge$ for profinite completion.
+In Section~\ref{sec:geometric}, $K$-theory means $\KO\otimes\Z[1/2]$, made four-periodic by the Thom class of~\S\ref{subsec:Delta}, and profinite completion is taken with respect to groups of odd order.
+
+% ═════════════════════════════════════════════════════════════════════════════
+\section{Arithmetic of localization and completion}\label{sec:algebra}
+% ═════════════════════════════════════════════════════════════════════════════
+
+\subsection{Localization of abelian groups}
+For a set of primes $\ell$ let $S_\ell$ be the multiplicative set generated by the primes not in $\ell$, and $\Zl=S_\ell^{-1}\Z$.
+The subrings of $\Q$ with unit are exactly the rings $\Zl$.
+For an abelian group $G$ we put $G_{(\ell)}=G\otimes\Zl$.
+
+\begin{proposition}\label{prop:loccolim}
+Order $S_\ell$ by divisibility and form the directed system $G_s=G$, with transition maps $G_s\to G_{s'}$ given by multiplication by $s'/s$.
+The maps $g\mapsto g\otimes 1/s$ induce an isomorphism $\colim_sG_s\cong G_{(\ell)}$.
+In particular localization is exact, and an abelian group admits a $\Zl$-module structure, necessarily unique, if and only if multiplication by every prime not in $\ell$ is bijective on it.
+\end{proposition}
+
+\begin{proof}
+For $G=\Z$ each map $\Z=G_s\to\Zl$ is injective and every $a/s\in\Zl$ is in the image of $G_s$.
+The general case follows because tensor products commute with filtered colimits, and exactness because filtered colimits are exact.
+\end{proof}
+
+\begin{lemma}\label{lem:tensorlocal}
+For sets of primes $\ell_1,\ell_2$ there are ring isomorphisms $\Z_{(\ell_1)}\otimes\Z_{(\ell_2)}\cong\Z_{(\ell_1\cap\ell_2)}$ and $\Z_{(\ell_1)}\times_\Q\Z_{(\ell_2)}=\Z_{(\ell_1\cup\ell_2)}$.
+\end{lemma}
+
+\begin{proof}
+Both rings in the first statement are obtained from $\Z$ by inverting the primes outside $\ell_1$ and the primes outside $\ell_2$.
+For the second, a rational number in lowest terms lies in $\Z_{(\ell_i)}$ if and only if its denominator is prime to $\ell_i$, and it is prime to both $\ell_1$ and $\ell_2$ if and only if it is prime to $\ell_1\cup\ell_2$.
+\end{proof}
+
+Call a commutative square of abelian groups $A\to B$, $A\to C$, $B\to D$, $C\to D$ a \emph{fibre square} if $0\to A\to B\oplus C\to D\to0$, with the difference of the two maps to $D$ on the right, is exact.
+
+\begin{proposition}[Fracture of groups]\label{prop:fracturegroups}
+Let $\ell_1,\ell_2$ be sets of primes with $\ell_1\cap\ell_2=\emptyset$ and $\ell_1\cup\ell_2$ the set of all primes.
+For every abelian group $G$ the square
+\[
+\begin{tikzcd}
+G\arrow[r]\arrow[d] & G_{(\ell_1)}\arrow[d]\\
+G_{(\ell_2)}\arrow[r] & G_{(0)}
+\end{tikzcd}
+\]
+is a fibre square.
+More generally, $G$ is the iterated fibre product over $G_{(0)}$ of its localizations $G_{(p)}$ at the single primes.
+\end{proposition}
+
+\begin{proof}
+The sequence $0\to\Z\to\Z_{(\ell_1)}\oplus\Z_{(\ell_2)}\to\Q\to0$ is exact: injectivity is clear, the kernel of the difference is $\Z_{(\ell_1)}\cap\Z_{(\ell_2)}=\Z$ by Lemma~\ref{lem:tensorlocal}, and every $a/b\in\Q$ with $b=b_1b_2$, $b_1$ a product of primes in $\ell_2$ and $b_2$ a product of primes in $\ell_1$, is a sum $x/b_1+y/b_2$ with $x/b_1\in\Z_{(\ell_1)}$, $y/b_2\in\Z_{(\ell_2)}$, because $b_1$ and $b_2$ are coprime.
+All terms are flat over $\Z$, and $\Tor_1^\Z(G,\Q)=0$, so tensoring with $G$ preserves exactness.
+The second statement follows by induction over the primes, which is legitimate because the localizations at finite sets of primes form a directed system whose colimit is $G$, and filtered colimits of fibre squares are fibre squares.
+\end{proof}
+
+\begin{proposition}[Serre classes]\label{prop:serre}
+Let $F\to E\to B$ be a fibration of connected spaces.
+\begin{enumerate}[label=\textup{(\arabic*)}]
+\item If the fundamental groups are abelian and two of $\pi_*F$, $\pi_*E$, $\pi_*B$ are $\Zl$-modules, so is the third.
+\item If $\pi_1B$ acts trivially on $\widetilde H_*(F;\F_p)$ for all $p\notin\ell$ and two of $\widetilde H_*(F;\Z)$, $\widetilde H_*(E;\Z)$, $\widetilde H_*(B;\Z)$ are $\Zl$-modules, so is the third.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+The first statement follows from the exact homotopy sequence and the five lemma applied to multiplication by a prime $q\notin\ell$.
+For the second, $\widetilde H_*(Y;\Z)$ is a $\Zl$-module if and only if $\widetilde H_*(Y;\F_q)=0$ for every $q\notin\ell$, by the universal coefficient sequence $0\to\widetilde H_i(Y)\otimes\F_q\to\widetilde H_i(Y;\F_q)\to\Tor(\widetilde H_{i-1}(Y),\F_q)\to0$.
+The Serre spectral sequence with $\F_q$ coefficients, which has untwisted coefficients by hypothesis, shows that if two of the three reduced mod $q$ homologies vanish so does the third.
+\end{proof}
+
+\subsection{Completions}
+Let $G$ be a group and $\ell$ a non-empty set of primes.
+The \emph{$\ell$-profinite completion} $G^\wedge_\ell=\lim G/H$ is the limit over the normal subgroups $H$ whose index is an $\ell$-number; it is a compact, Hausdorff, totally disconnected group, and $G\to G^\wedge_\ell$ is universal for homomorphisms to finite $\ell$-groups.
+For $G=\Z$ and $\ell=\{p\}$ this is the ring $\Zhat_p=\lim\Z/p^n$ of $p$-adic integers, which is also the completion of $\Z$ for the metric $|x-y|_p=p^{-v_p(x-y)}$.
+By the Chinese remainder theorem $\Zhat_\ell=\prod_{p\in\ell}\Zhat_p$, and $G^\wedge_\ell=\prod_{p\in\ell}G^\wedge_p$ for abelian $G$.
+Profinite completion is exact on finitely generated abelian groups, where it is $G\otimes\Zhat_\ell$, but not in general: $\Q^\wedge=0$ and $(\Q/\Z)^\wedge=0$, so $0\to\Z\to\Q\to\Q/\Z\to0$ becomes $0\to\Zhat\to0\to0\to0$.
+We define the \emph{formal completion} $\overline G_\ell=G\otimes\Zhat_\ell$.
+It is exact because $\Zhat_\ell$ is torsion free, and it is the unique functor that agrees with profinite completion on finitely generated groups and commutes with filtered colimits.
+The ring $\Q\otimes\Zhat_p=\Q_p$ is the field of $p$-adic numbers, and $\Af=\Q\otimes\Zhat$ is the ring of finite adeles, the restricted product of the $\Q_p$ with respect to the $\Zhat_p$.
+
+The profinite groups of interest come in three kinds.
+For an infinite complex $X$ and a cohomology theory $h^*$ with $h^i(\mathrm{pt})$ finitely generated, the reduced groups $\widetilde h^i(X)$ are profinite when the homotopy groups of $X$ are finite; for example $\widetilde K(\RP^\infty)\cong\Zhat_2$.
+The Galois group of an infinite Galois extension is profinite; $\Gal(\overline{\F}_q/\F_q)\cong\Zhat$ is generated topologically by the Frobenius $x\mapsto x^q$, and the Galois group of the field $\Q^{\mathrm{cyc}}$ generated by all roots of unity is $\Zhat\units$, acting on the roots of unity through $\zeta\mapsto\zeta^a$.
+By the theorem of Kronecker and Weber, $\Q^{\mathrm{cyc}}$ is the maximal abelian extension of $\Q$, and the \emph{cyclotomic character}
+\[
+\chi\colon\Gal(\Qbar/\Q)\longrightarrow\Gal(\Q^{\mathrm{cyc}}/\Q)=\Zhat\units
+\]
+is the abelianization of the absolute Galois group.
+Its torsion consists of the complex conjugations, all conjugate, with $\chi(c)=-1$.
+For $q\ne p$ the Frobenius element at $q$ maps to $q\in\Zhat_p\units$.
+
+\subsection{The $p$-adic units}
+The analytic structure of $\Zhat_p$ makes the group of units explicit.
+
+\begin{proposition}\label{prop:units}
+There are canonical isomorphisms
+\[
+\Zhat_p\units\cong\mu_{p-1}\times(1+p\Zhat_p)\cong\Z/(p-1)\oplus\Zhat_p\quad(p>2),\qquad \Zhat_2\units\cong\{\pm1\}\times(1+4\Zhat_2)\cong\Z/2\oplus\Zhat_2 .
+\]
+For $p$ odd, $\Zhat_p\units$ is topologically cyclic, and $a\in\Z$ is a topological generator if and only if $a$ is a primitive root modulo $p^2$.
+\end{proposition}
+
+\begin{proof}
+Let $p$ be odd.
+Reduction modulo $p$ gives an exact sequence $1\to U\to\Zhat_p\units\to\F_p\units\to1$ with $U=1+p\Zhat_p$.
+We split it with the Teichm\"uller representatives.
+The order of $(\Z/p^k)\units$ is $p^{k-1}(p-1)$, so $x^{p^{k-1}(p-1)}\equiv1\pmod{p^k}$ for every unit $x$.
+The binomial expansion shows $(a+pb)^{p^n}\equiv a^{p^n}\pmod{p^{n+1}}$, and therefore $\omega(x)=\lim_nx^{p^n}$ exists and depends only on $x$ modulo $p$.
+Each coset of $U$ flows under iteration of the Frobenius $x\mapsto x^p$ to the point $\omega(x)$, which satisfies $\omega(x)^{p-1}=1$; the points $\omega(x)$ form a subgroup $\mu_{p-1}$ mapping isomorphically to $\F_p\units$.
+
+For the second factor we use the $p$-adic logarithm and exponential,
+\[
+\log(1+u)=\sum_{n\ge1}(-1)^{n+1}\frac{u^n}n,\qquad \exp(x)=\sum_{n\ge0}\frac{x^n}{n!}.
+\]
+The logarithm converges on $p\Zhat_p$.
+By Legendre's formula $v_p(n!)=(n-s_p(n))/(p-1)$, with $s_p(n)$ the sum of the $p$-adic digits of $n$, and hence $v_p(x^n/n!)\ge n-(n-1)/(p-1)\to\infty$ for $x\in p\Zhat_p$.
+The identities $\exp\log=\mathrm{id}$ and $\log\exp=\mathrm{id}$ hold as formal power series, hence $\log\colon U\to p\Zhat_p$ is an isomorphism of topological groups, and $p\Zhat_p\cong\Zhat_p$ by division by $p$.
+For $p=2$ the splitting comes from reduction modulo $4$ and the lift $\{\pm1\}$; since $v_2(n!)=n-s_2(n)$, the exponential converges only on $4\Zhat_2$, and $\log$ maps $1+4\Zhat_2$ isomorphically onto $4\Zhat_2\cong\Zhat_2$.
+
+For the last statement, $a$ generates $\Zhat_p\units$ topologically if and only if its image generates $\F_p\units$ and its component in $U\cong\Zhat_p$ generates $\Zhat_p$, that is, $a^{p-1}\not\equiv1\pmod{p^2}$.
+\end{proof}
+
+The decompositions $\Zhat_p\units\cong\Z/(p-1)\oplus\Zhat_p$ and $\Zhat_2\units\cong\Z/2\oplus\Zhat_2$ are the $p$-adic analogues of $\C\units\cong S^1\times\R$ and $\R\units\cong\Z/2\times\R$ given by argument and logarithm of the absolute value.
+Since $\Zhat_p$ maps non-trivially into $\Zhat_q\units$ whenever $q\equiv1\pmod p$, there are non-trivial homomorphisms from $\Zhat=\Gal(\overline\F_q/\F_q)$ to $\Zhat\units=\Gal(\Qbar/\Q)^{\mathrm{ab}}$, and these connect characteristic $q$ with characteristic zero in Section~\ref{sec:etale}.
+
+\subsection{The arithmetic squares}
+
+\begin{proposition}\label{prop:arithsquare}
+The squares of rings
+\[
+\begin{tikzcd}
+\Z\arrow[r]\arrow[d] & \Zhat\arrow[d]\\
+\Q\arrow[r] & \Af
+\end{tikzcd}
+\qquad\qquad
+\begin{tikzcd}
+\Zp\arrow[r]\arrow[d] & \Zhat_p\arrow[d]\\
+\Q\arrow[r] & \Q_p
+\end{tikzcd}
+\]
+are fibre squares.
+For every abelian group $G$, the squares obtained by tensoring with $G$ are fibre squares.
+\end{proposition}
+
+\begin{proof}
+For the first square, the map $\Z\to\Q\oplus\Zhat$ is injective, and a rational number that is a $p$-adic integer for all $p$ is an integer.
+To see that $\Q\oplus\Zhat\to\Af$ is onto, let $a=(r_p)$ be a finite adele and let $r_p$ be a component that is not integral, $r_p=u/p^\alpha$ with $u\in\Zhat_p$.
+Choose $n\in\Z$ with $n\equiv u\pmod{p^\alpha}$; subtracting the diagonal rational number $n/p^\alpha$ makes the $p$-component integral without changing the integrality of the others.
+After finitely many steps $a$ becomes an element of $\Zhat$.
+The second square is treated in the same way, using that $n/p^a+q$ with $n\in\Z$, $q\in\Zhat_p$ is an arbitrary $p$-adic number.
+All the rings in both squares are torsion free, so the short exact sequences consist of flat $\Z$-modules and remain exact after tensoring with any $G$.
+\end{proof}
+
+Taking $G$ finitely generated, $G$ is recovered from $G\otimes\Q$, its profinite completion $\prod_pG^\wedge_p$, and the two maps into $G\otimes\Af$.
+The next two sections carry out the same decomposition for spaces: a homotopy type is broken into a rational piece and infinitely many $p$-adic pieces, and reassembled over an adelic homotopy type.
+
+
+% ═════════════════════════════════════════════════════════════════════════════
+\section{Localization of homotopy types}\label{sec:localization}
+% ═════════════════════════════════════════════════════════════════════════════
+
+Throughout this section $\ell$ is a fixed set of primes, possibly empty, and spaces are simple.
+
+\begin{definition}
+A simple space $Y$ is \emph{$\ell$-local} if its homotopy groups are $\Zl$-modules.
+A map $\lambda\colon X\to X'$ to an $\ell$-local space is a \emph{localization} if every map $f\colon X\to Y$ to an $\ell$-local space factors as $f=f_{(\ell)}\circ\lambda$ for a map $f_{(\ell)}$ that is unique up to homotopy.
+\end{definition}
+
+\begin{theorem}\label{thm:localization}
+For a map $\lambda\colon X\to X'$ of simple spaces the following are equivalent.
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item $\lambda$ is a localization.
+\item $\lambda$ localizes integral homology: $\widetilde H_*(X')$ is a $\Zl$-module and $\widetilde H_*(X)\otimes\Zl\to\widetilde H_*(X')$ is an isomorphism.
+\item $\lambda$ localizes homotopy: $\pi_*X'$ is a $\Zl$-module and $\pi_*X\otimes\Zl\to\pi_*X'$ is an isomorphism.
+\end{enumerate}
+Every simple space has a localization.
+\end{theorem}
+
+Taking $\lambda$ to be the identity, a simple space has $\Zl$-local homotopy groups if and only if it has $\Zl$-local reduced homology.
+A map between $\ell$-local spaces is a homotopy equivalence if and only if it induces an isomorphism on $H_*(-;\Q)$ and on $H_*(-;\F_p)$ for all $p\in\ell$.
+The latter uses the following remark, which we use repeatedly: if $C$ is a space with $\widetilde H_*(C;\Q)=0$ and $\widetilde H_*(C;\F_p)=0$ for $p\in\ell$, then $\widetilde H_*(C;\Zl)=0$.
+Indeed $A=\widetilde H_*(C;\Zl)$ is then a torsion $\Zl$-module with $A\otimes\F_p=0$ and no $p$-torsion for $p\in\ell$, and the primes outside $\ell$ act invertibly on it, so $A=0$.
+
+\begin{proof}
+We first show that (ii) and (iii) are equivalent.
+Three remarks are used.
+First, $\lambda$ is the limit of the induced maps of Postnikov sections $X_n\to X'_n$, and also, after passing to $(n-1)$-connected covers, gives a tower of maps $\lambda\langle n\rangle$ from $X\langle n\rangle$ to $X'\langle n\rangle$ whose successive fibres are maps of Eilenberg--MacLane spaces.
+Second, a homomorphism $\pi\to\pi'$ induces a map of path fibrations $K(\pi,n)\to P\to K(\pi,n+1)$.
+Third, in a map of fibrations of connected spaces with abelian fundamental groups, if two of the three maps localize homotopy, so does the third, by Proposition~\ref{prop:serre}(1) and the five lemma; if the fundamental groups of the bases act trivially on the homology of the fibres and two of the maps localize homology, so does the third, by Proposition~\ref{prop:serre}(2) and the comparison theorem for the Serre spectral sequences with $\Zl$ coefficients.
+
+\emph{Step 1: $K(\pi,1)$.}
+If $\lambda\colon K(\pi,1)\to K(\pi',1)$ localizes homology then it localizes $\pi_1=H_1$.
+Conversely, for $\pi=\Z$ the map $S^1\to S^1_{(\ell)}$ constructed below localizes homology, for $\pi=\Z/p^n$ the localization is the identity or the map to a point according as $p\in\ell$ or not, and the general case follows by finite products and filtered colimits, which commute with homology.
+
+\emph{Step 2: $K(\pi,n)$.}
+By induction on $n$, using the path fibrations and the third remark.
+
+\emph{Step 3: general $X$.}
+If $\lambda$ localizes homology, then by the Hurewicz theorem it localizes $\pi_1=H_1$; by Step 1 and the third remark the map of universal covers localizes homology, and the Hurewicz theorem gives $\pi_2$.
+Inductively, the map of $(n-1)$-connected covers localizes homology and hence $\pi_n$.
+If $\lambda$ localizes homotopy, Step 2 and the Postnikov towers show inductively that each $X_n\to X'_n$ localizes homology, and so does $\lambda$, since homology is detected on finite Postnikov sections in each degree.
+
+We show that (i) and (ii) are equivalent.
+Suppose (ii).
+Given $f\colon X\to Y$ with $Y$ local, the obstructions to extending $f$ over the mapping cylinder of $\lambda$, and to the uniqueness of the extension, lie in $H^{*}(X',X;\pi_*Y)$.
+Since $\pi_*Y$ is a $\Zl$-module and $H_*(X',X;\Zl)=0$, these groups vanish: the cellular cochains with coefficients in a $\Zl$-module $M$ are $\Hom_{\Zl}(C_*(X',X)\otimes\Zl,M)$, and $C_*(X',X)\otimes\Zl$ is an acyclic complex of free $\Zl$-modules, hence contractible.
+Conversely, suppose $\lambda$ is a localization.
+Taking $Y$ to be the Eilenberg--MacLane spaces $K(\Q,n)$ and $K(\F_p,n)$, $p\in\ell$, which are local, $\lambda$ induces isomorphisms on $H^*(-;\Q)$ and $H^*(-;\F_p)$, hence on homology with these coefficients.
+By the remark preceding the proof $H_*(X',X;\Zl)=0$.
+Since the homotopy of $X'$ is local, so is its homology, by the equivalence of (ii) and (iii) applied to the identity of $X'$, and (ii) follows.
+
+The existence of localizations is Theorem~\ref{thm:postnikovloc} below.
+\end{proof}
+
+\subsection{Cellular construction}
+Choose a cofinal sequence $s_1\mid s_2\mid\cdots$ in $S_\ell$ and maps $S^i\to S^i$ of degree $s_{n+1}/s_n$.
+The \emph{local sphere} $S^i_{(\ell)}$ is the mapping telescope of the sequence $S^i\to S^i\to\cdots$.
+Its reduced homology is $\colim(\Z\to\Z\to\cdots)=\Zl$ in degree $i$, so the inclusion of the first sphere localizes homology, and by Theorem~\ref{thm:localization} $\pi_*S^i_{(\ell)}=\pi_*S^i\otimes\Zl$.
+The effect of degree $d$ maps on homotopy is not the obvious one: a map of degree $d$ induces multiplication by $d^2$ on $\pi_3S^2=\Z$, as the Hopf invariant shows.
+Since $S^i_{(\ell)}$ is the telescope of degree $s$ maps and its homotopy is $\pi_*S^i\otimes\Zl$, the map induced on the $q$-torsion of $\pi_*S^i$ by a degree $q$ map, $q$ a prime, is nilpotent.
+
+A \emph{local CW complex} is built from a point, or from a local $1$-sphere, by attaching cones on local spheres along maps into the previously constructed local skeleta.
+
+\begin{proposition}\label{prop:cellularloc}
+If $X$ is a CW complex with one $0$-cell and no $1$-cells, there is a local CW complex $X_{(\ell)}$ with one local cell for each cell of $X$, and a cellular map $X\to X_{(\ell)}$ that localizes homology.
+In particular every simply connected space has a localization.
+\end{proposition}
+
+\begin{proof}
+By induction on the skeleta.
+If $X^{(n)}$ is obtained from $X^{(n-1)}$ by attaching cells along $f\colon\bigvee S^{n-1}\to X^{(n-1)}$, and $X^{(n-1)}\to X^{(n-1)}_{(\ell)}$ is constructed, then $X^{(n-1)}_{(\ell)}$ is local by Theorem~\ref{thm:localization}, so the composite $\bigvee S^{n-1}\to X^{(n-1)}_{(\ell)}$ extends uniquely to $f_{(\ell)}\colon\bigvee S^{n-1}_{(\ell)}\to X^{(n-1)}_{(\ell)}$, and we put $X^{(n)}_{(\ell)}=X^{(n-1)}_{(\ell)}\cup_{f_{(\ell)}}C(\bigvee S^{n-1}_{(\ell)})$.
+The ladder of Puppe sequences and the five lemma show that $X^{(n)}\to X^{(n)}_{(\ell)}$ localizes homology.
+For infinite complexes we take the union.
+\end{proof}
+
+\subsection{Postnikov construction}
+
+\begin{theorem}\label{thm:postnikovloc}
+Every Postnikov tower $X$ admits a map to a tower $X_{(\ell)}$ of fibrations with fibres $K(\pi_n\otimes\Zl,n)$, which localizes homotopy groups and $k$-invariants.
+In particular every simple space has a localization, unique up to unique homotopy equivalence, and localization is a functor on the homotopy category of simple spaces.
+\end{theorem}
+
+\begin{proof}
+Suppose $X_{n-1}\to(X_{n-1})_{(\ell)}$ has been constructed.
+The $k$-invariant $k\in H^{n+1}(X_{n-1};\pi_n)$ maps to $\bar k\in H^{n+1}(X_{n-1};\pi_n\otimes\Zl)$.
+By the universal coefficient theorem over $\Zl$ and Theorem~\ref{thm:localization}, restriction $H^{n+1}((X_{n-1})_{(\ell)};\pi_n\otimes\Zl)\to H^{n+1}(X_{n-1};\pi_n\otimes\Zl)$ is an isomorphism, and we let $k_{(\ell)}$ be the class restricting to $\bar k$.
+Define $(X_n)_{(\ell)}$ as the homotopy fibre of $k_{(\ell)}$; the map $X_n\to(X_n)_{(\ell)}$ is induced by naturality.
+The construction does not use the triviality of the action of $\pi_1$ on the homology of the universal cover.
+\end{proof}
+
+\begin{proposition}\label{prop:locfib}
+In the category of simple spaces localization preserves fibrations, and it preserves cofibrations $A\to X\to X\cup CA$ whose cofibre is simple.
+\end{proposition}
+
+\begin{proof}
+For a fibration $F\to E\to B$, the map $F_{(\ell)}\to\operatorname{fib}(E_{(\ell)}\to B_{(\ell)})$ is an isomorphism on homotopy groups by the five lemma applied to the ladder of exact homotopy sequences, since localization of groups is exact.
+For a cofibration the map $X\cup CA\to X_{(\ell)}\cup C A_{(\ell)}$ localizes homology by the five lemma, and the target has local homology, so it is the localization when it is simple.
+\end{proof}
+
+No extension of localization to all connected spaces preserves both fibrations and cofibrations.
+Consider the covering $S^2\to\RP^2\to\RP^\infty$ and the cofibration $S^1\xrightarrow{2}S^1\to\RP^2$, and localize away from $2$.
+If cofibrations were preserved, $\RP^2_{(\ell)}$ would be the cofibre of an equivalence, hence contractible; if fibrations were preserved, $\RP^2_{(\ell)}$ would be $S^2_{(\ell)}$, because $\RP^\infty_{(\ell)}$ is contractible.
+
+\subsection{Fracture}
+
+\begin{theorem}[Fracture square]\label{thm:fracture}
+Let $X$ be simple and let $\ell_1,\ell_2$ be complementary sets of primes.
+The square
+\[
+\begin{tikzcd}
+X\arrow[r]\arrow[d] & X_{(\ell_1)}\arrow[d]\\
+X_{(\ell_2)}\arrow[r] & X_{(0)}
+\end{tikzcd}
+\]
+is a homotopy pullback.
+More generally, $X$ is the iterated homotopy fibre product of the $X_{(p)}$ over $X_{(0)}$.
+\end{theorem}
+
+\begin{proof}
+Let $P$ be the homotopy pullback.
+Its Mayer--Vietoris sequence of homotopy groups reads
+\[
+\cdots\to\pi_{n+1}X_{(0)}\to\pi_nP\to\pi_nX_{(\ell_1)}\oplus\pi_nX_{(\ell_2)}\to\pi_nX_{(0)}\to\cdots .
+\]
+By Proposition~\ref{prop:fracturegroups} the right-hand maps are surjective in every degree, including degree one, so $P$ is connected and the sequence breaks into short exact sequences $0\to\pi_nP\to\pi_nX_{(\ell_1)}\oplus\pi_nX_{(\ell_2)}\to\pi_nX_{(0)}\to0$.
+Comparing with the fibre square of the groups $\pi_nX$ we see that $X\to P$ is a weak equivalence.
+\end{proof}
+
+\subsection{Examples}\label{subsec:locexamples}
+\begin{enumerate}[label=(\arabic*),leftmargin=*]
+\item $X_{(0)}$ is an $H$-space if and only if it is a product of rational Eilenberg--MacLane spaces, by the theorem of Milnor and Moore on rational Hopf algebras.
+\item A simple space $X$ of finite type is an $H$-space if and only if each $X_{(p)}$ is an $H$-space and the rational cohomology rings $H^*(X_{(p)};\Q)$ are isomorphic as rings for all $p$.
+For the converse, the $H$-structure of a rational space is determined by its Pontryagin ring, so the multiplications on the $X_{(p)}$ induce compatible multiplications over $X_{(0)}$ and Theorem~\ref{thm:fracture} assembles them.
+When $H^*(X;\Q)$ is finite dimensional the condition on rings is automatic, since the cohomology of each $X_{(p)}$ is then a finite exterior algebra.
+\item The rational Chern classes give $(BU_n)_{(0)}\simeq\prod_{i=1}^nK(\Q,2i)$; the Pontryagin and Euler classes give $(BSO_{2n})_{(0)}\simeq\prod_{i=1}^{n-1}K(\Q,4i)\times K(\Q,2n)$ and $(BSO_{2n+1})_{(0)}\simeq\prod_{i=1}^nK(\Q,4i)$.
+Since $H^*(BSO_{2n-1};\Z[1/2])$ is polynomial on the Pontryagin classes, the projection $BSO_{2n-1}\to BSO$ splits over the $(4n-1)$-skeleton at odd primes.
+\item The Thom space $MU_n$ is the cofibre of $BU_{n-1}\to BU_n$, so $(MU_n)_{(0)}$ has $K(\Q,2n)$ as a retract.
+Thus every class in $H^{2i}(P;\Q)$ of a finite polyhedron has a non-zero multiple that is the Thom class of a subcomplex with a complex normal bundle.
+\item $S^n_{(0)}$ is an $H$-space if and only if $n$ is odd, and $S^{2n-1}_{(0)}=K(\Q,2n-1)$; while $S^{2n}_{(0)}$ is the fibre of the cup square $K(\Q,2n)\to K(\Q,4n)$.
+By Adams~\cite{AdamsHopf}, $S^{2n-1}_{(2)}$ is an $H$-space if and only if $n=1,2,4$, and a loop space if and only if $n=1,2$.
+For $p$ odd, $S^{2n-1}_{(p)}$ is always an $H$-space, and it is a loop space if and only if $n\mid p-1$ (Theorem~\ref{thm:loopspheres}).
+By Dirichlet's theorem each odd sphere is a loop space at infinitely many primes, while at a given odd prime $p$ only the spheres $S^{2n-1}$ with $n\mid p-1$ are.
+\end{enumerate}
+
+% ═════════════════════════════════════════════════════════════════════════════
+\section{Profinite and formal completion}\label{sec:completion}
+% ═════════════════════════════════════════════════════════════════════════════
+
+Following Artin and Mazur~\cite{ArtinMazur}, the profinite completion of a space is first an inverse system of homotopy types with finite homotopy groups.
+We turn this pro-object into an actual homotopy type; the price is a compact topology on the functor it represents, and the gain is that inverse limits become available in homotopy theory.
+
+\subsection{Compact representable functors}
+
+\begin{proposition}\label{prop:compactfunctor}
+Let $F$ be a space with finite homotopy groups.
+For every finite complex $Y$ the set $[Y,F]$ is finite, and for every complex $Y$ the restriction map
+\[
+[Y,F]\longrightarrow\lim_{Y_\alpha}[Y_\alpha,F]
+\]
+over the finite subcomplexes $Y_\alpha$ of $Y$ is a bijection.
+Hence $[-,F]$ takes values in profinite sets, that is, compact Hausdorff totally disconnected spaces, and maps $F\to F'$ induce continuous natural transformations.
+\end{proposition}
+
+\begin{proof}
+Finiteness follows by induction on the cells: attaching an $i$-cell multiplies the number of homotopy classes of extensions by at most $|\pi_iF|$.
+Surjectivity of the restriction holds for every $F$: the partial maps defined on unions of finite subcomplexes and compatible up to homotopy form an inductive set, since any chain is countable and can be realized on a mapping telescope; a maximal element is defined on all of $Y$ because any finite subcomplex can be added by a homotopy extension.
+For injectivity, if $f$ and $g$ agree on each $Y_\alpha$ up to homotopy, the homotopy classes of homotopies between $f|Y_\alpha$ and $g|Y_\alpha$ form an inverse system of non-empty finite sets, whose limit is non-empty; by the argument for surjectivity an element of the limit is realized by a homotopy on $Y$.
+\end{proof}
+
+We use repeatedly the fact that a limit of non-empty compact Hausdorff spaces is non-empty and compact Hausdorff.
+Its failure for non-compact sets is the reason why limits of representable functors are not representable in general.
+Let $L$ be the limit of the functors $[-,S^2]$ along the map induced by a self-map of degree $3$.
+Then $L(S^1)$ and $L(S^2)=\lim(\cdots\xrightarrow3\Z\xrightarrow3\Z)$ are points, while $[\RP^2,S^2]\cong\Z/2$ and multiplication by $3$ is the identity on it, so $L(\RP^2)$ has two elements.
+A representable functor with trivial values on $S^1$ and $S^2$ is trivial on the two-dimensional complex $\RP^2$, so $L$ is not representable.
+
+\begin{definition}
+For a connected CW complex $X$, let $\{f\}$ be the category whose objects are the homotopy classes $f\colon X\to F$ with $F$ of finite homotopy groups, one $F$ chosen in each homotopy type, and whose morphisms are homotopy commutative triangles.
+\end{definition}
+
+\begin{proposition}\label{prop:cofiltered}
+The category $\{f\}$ is cofiltered: any two objects map to a common one, and any two parallel morphisms are equalized after composing with a further morphism.
+\end{proposition}
+
+\begin{proof}
+For $f$ and $g$ take $f\times g\colon X\to F\times F'$.
+For two maps $h,h'\colon F'\to F$ under $X$, let $C(h,h')=\{(\gamma,x)\in F^I\times F':\gamma(0)=h(x),\gamma(1)=h'(x)\}$ be their homotopy equalizer.
+There is an exact sequence $\cdots\to\pi_iC(h,h')\to\pi_iF'\xrightarrow{h_*-h'_*}\pi_iF\to\cdots$, so $C(h,h')$ has finite homotopy groups, and the given homotopy $hf'\simeq h'f'$ provides a lift $X\to C(h,h')$ through which $h$ and $h'$ become equal.
+\end{proof}
+
+\begin{proposition}\label{prop:limitrep}
+Let $\{F_\alpha\}$ be a functor from a cofiltered category to the category of spaces with finite homotopy groups.
+Then $Y\mapsto\lim_\alpha[Y,F_\alpha]$ is representable, and its values are non-empty profinite sets.
+\end{proposition}
+
+\begin{proof}
+For each $\alpha$ and $Y$ let $I_\alpha(Y)$ be the intersection of the images of all the maps $[Y,F_\beta]\to[Y,F_\alpha]$.
+Directedness and eventual equality of parallel morphisms imply that all morphisms $\beta\to\alpha$ induce the same map $I_\beta(Y)\to I_\alpha(Y)$, so the limit may be computed as an ordinary limit of the compact sets $I_\alpha(Y)$ indexed by a directed set; these are non-empty by the finite intersection property.
+The functor $G=\lim_\alpha[-,F_\alpha]$ takes wedges to products, since limits commute with products.
+For the Mayer--Vietoris axiom, let $Y=A\cup B$ with $A\cap B=Z$ and let $a\in G(A)$, $b\in G(B)$ agree in $G(Z)$.
+At each index the set of elements of $[Y,F_\alpha]$ restricting to the components of $a$ and $b$ is non-empty, because $[-,F_\alpha]$ is representable, and compact; these sets form an inverse system whose limit is non-empty.
+By Brown's representability theorem $G$ is represented by a CW complex.
+\end{proof}
+
+\begin{definition}
+The \emph{profinite completion} of a connected CW complex $X$ consists of the profinite-set-valued functor $\hX=\lim_{\{f\}}[-,F]$, a CW complex, also written $\hX$, representing its underlying set-valued functor, and the canonical class $X\to\hX$ given by the compatible family of all maps $f\colon X\to F$.
+Replacing finite groups by $\ell$-groups gives the \emph{$\ell$-profinite completion} $\hX_\ell$.
+\end{definition}
+
+\begin{proposition}\label{prop:completionbasic}
+\begin{enumerate}[label=\textup{(\arabic*)}]
+\item If $X$ is $(k-1)$-connected, $\pi_k\hX\cong(\pi_kX)^\wedge$ as topological groups.
+\item For every finite abelian group $A$ the map $\colim_{\{f\}}H^i(F;A)\to H^i(X;A)$ is an isomorphism, and $H^i(X;A)$ is a direct summand of $H^i(\hX;A)$ containing the continuous cohomology classes in its closure.
+\item If $\operatorname{Hom}(\pi_1X,\text{finite})$ and the groups $H^i(X;\Z/n)$ are countable, then $\hX$ is the limit of a tower $\cdots\to F_n\to F_{n-1}\to\cdots$ of fibrations of spaces with finitely many non-zero homotopy groups, all finite, and the compact open topology on $[-,F_\infty]$, $F_\infty=\lim F_n$, agrees with the topology of $[-,\hX]$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+For (1), every finite quotient $\pi_kX\to\pi$ occurs through $X\to K(\pi_kX,k)\to K(\pi,k)$, and by a covering space argument when $k=1$ and obstruction theory when $k>1$ the maps $X\to F$ with $F$ $(k-1)$-connected and $\pi_kX\to\pi_kF$ onto are cofinal.
+In (2), surjectivity uses the objects $X\to K(A,i)$, and injectivity the lift of $f$ to the fibre of a class that vanishes on $X$.
+The continuity statement is a formal consequence of the definition of the topology on $[-,\hX]$.
+In (3), under the countability hypothesis the indexing category has a cofinal subcategory with countably many objects and finitely many morphisms between any two, from which a cofinal sequence is extracted inductively; the comparison of topologies uses that the finite subcomplexes are cofinal among compact subsets of a CW complex.
+\end{proof}
+
+\begin{theorem}\label{thm:completionfg}
+Let $X$ be simply connected with finitely generated homotopy groups.
+\begin{enumerate}[label=\textup{(\arabic*)}]
+\item $H^*(\hX;\Z/n)\cong H^*(X;\Z/n)$ and $\pi_*\hX\cong(\pi_*X)^\wedge=\pi_*X\otimes\Zhat$.
+\item $H^*(\hX;\Zhat)\cong H^*(X;\Z)\otimes\Zhat$, where the left side is singular cohomology with coefficients in the profinite group $\Zhat$.
+\item Every map from $X$ to a simply connected space with profinite homotopy groups extends uniquely over $\hX$.
+\item Among maps of simply connected spaces, $X\to\hX$ is characterized by the profiniteness of $\pi_*\hX$ together with either of the two properties in~\textup{(1)}.
+\item The topology on $[-,\hX]$ is determined by the homotopy type of $\hX$: the completion of the underlying space $|\hX|$ is $\hX$ as a compact representable functor.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+The key step is to construct an inverse system of spaces $\{F_i\}$ with finite homotopy groups and a map $X\to Y=\lim F_i$ with $\pi_*Y=\pi_*X\otimes\Zhat$ and $H^*(X;\Z/n)\cong\colim H^*(F_i;\Z/n)$.
+For $X=K(\Z,1)$ take $F_i=K(\Z/i,1)$: the fibre $K(\Zhat/\Z,1)$ of $K(\Z,1)\to K(\Zhat,1)$ has $\Zhat/\Z$ a $\Q$-vector space, hence trivial mod $n$ cohomology, and $\colim_iH^*(K(\Z/i,1);\Z/n)=H^*(S^1;\Z/n)$.
+Finite products and path fibrations give the case of $K(G,n)$, $G$ finitely generated, the second isomorphism following from a limit of Serre spectral sequences whose $E_2$-terms are finite in each degree.
+For a Postnikov system one distributes the reductions mod $r$ of the $k$-invariant among the $F_i$, which is possible by the cohomology isomorphism already obtained, and passes to the limit; the limit of the fibration sequences is a fibration sequence because its homotopy sequence is a limit of exact sequences of finite groups.
+Since $H^*(X;\Z/n)\cong\colim H^*(F_i;\Z/n)$, every map $X\to F$ with $F$ simply connected with finitely many finite homotopy groups factors, eventually uniquely, through some $F_i$, so $\{F_i\}$ is cofinal in $\{f\}$ and $\hX\simeq Y$.
+This proves (1).
+For (2), the Milnor sequence for $\Zhat=\lim\Z/n$ has vanishing $\lim^1$ term because the groups $H^{i-1}(\hX;\Z/n)$ are finite.
+Statement (3) follows from (1) by obstruction theory, and (5) follows from (3).
+For (4), if $X\to Y$ with $\pi_*Y$ profinite induces isomorphisms on mod $n$ cohomology, then on $\pi_2=H_2$ it is profinite completion by the following lemma, and one proceeds by induction on connective covers.
+\end{proof}
+
+\begin{lemma}
+If $c\colon\pi\to\pi'$ is a homomorphism of abelian groups such that $c\otimes\Z/n$ is an isomorphism of finite groups for all $n$, and $\pi'$ is a limit of finite groups, then $c$ is the profinite completion of $\pi$.
+\end{lemma}
+
+\begin{proof}
+For $G$ with $G\otimes\Z/n$ finite, $\widehat G=\lim_n G\otimes\Z/n$, so $c$ induces $\widehat\pi\cong\widehat{\pi'}$.
+Multiplication by $n$ on the compact group $\pi'$ has closed image of finite index, hence open, so $\pi'\to\widehat{\pi'}$ is continuous and onto by compactness; it is injective for every profinite group.
+\end{proof}
+
+\begin{example}\label{ex:completions}
+\begin{enumerate}[label=(\arabic*),leftmargin=*]
+\item $K(G,n)^\wedge\simeq K(G\otimes\Zhat,n)$ for finitely generated abelian $G$, and $X\simeq\hX$ if $\pi_*X$ is finite.
+\item $\widehat S^n$ is not a Moore space: by a theorem of Bousfield, it has non-trivial rational homology in infinitely many degrees.
+\item $K(\Q/\Z,1)^\wedge\simeq(\CP^\infty)^\wedge\simeq K(\Zhat,2)$, since the system $K(\Z/n,1)$ is cofinal by the Bockstein.
+\item The completion of $BO_2$ is the total space of the non-orientable fibration over $K(\Z/2,1)$ with fibre $K(\Zhat,2)$.
+At odd primes the picture is different: $\pi_1$ completes to zero, $H^*(BO_2;\F_p)=\F_p[p_1]$ with $p_1$ of degree $4$, and $\Omega(BO_2)^\wedge_p\simeq\widehat S^3_p$.
+The two non-zero homotopy groups of $O_2$ become the infinitely many homotopy groups of $\widehat S^3_p$; for instance $\pi_4(BO_2)^\wedge_p=\Zhat_p$, and the first torsion is $\pi_{2p+1}(BO_2)^\wedge_p=\Z/p$.
+\item By the theorem of Barratt, Kan, Priddy and Quillen, the Pontryagin--Thom construction applied to finite covers gives a map $K(\Sigma_\infty,1)\to Q_0S^0$ inducing isomorphisms on cohomology with finite coefficients, where $Q_0S^0$ is the degree zero component of $\colim\Omega^nS^n$.
+Since $Q_0S^0$ has finite homotopy groups, it is the profinite completion of $K(\Sigma_\infty,1)$, and the completion kills the perfect group $A_\infty$, leaving $\pi_1=\Z/2$.
+\end{enumerate}
+\end{example}
+
+\begin{proposition}\label{prop:padicsplit}
+If $(\pi_1X)^\wedge_\ell=0$, there is a natural splitting $\hX_\ell\simeq\prod_{p\in\ell}\hX_p$ of compact representable functors, and every map $\hX_\ell\to\widehat Y_\ell$ is the product of its $p$-adic components.
+Every map $\hX_p\to\widehat Y_q$ with $p\ne q$ is null-homotopic.
+\end{proposition}
+
+\begin{proof}
+A simply connected space $F$ with finitely many non-zero homotopy groups, all $\ell$-groups, splits by a Postnikov argument as the product of its $p$-primary parts, and any map between spaces of this kind that are $p$-primary and $q$-primary, $p\ne q$, is null by obstruction theory, since the cohomology of a $p$-primary space with coefficients in a $q$-group vanishes.
+Writing $F=\lim_nF^{(n)}$ over its coskeleta and passing to the limit over $\{f\}$ gives the splitting.
+\end{proof}
+
+\subsection{Formal completion}
+For a countable CW complex $X=\bigcup X_n$, filtered by finite subcomplexes, the \emph{formal $\ell$-completion} is the mapping telescope
+\[
+\overline X_\ell=\hocolim_n(X_n)^\wedge_\ell .
+\]
+Its homotopy type, and the partial topology on $[Y,\overline X_\ell]=\colim_n[Y,(X_n)^\wedge_\ell]$ for finite $Y$, depend only on the homotopy type of $X$, by cofinality of filtrations.
+
+\begin{proposition}\label{prop:formalcompletion}
+If $X$ is simply connected, $\pi_i\overline X_\ell\cong\pi_iX\otimes\Zhat_\ell$ as topological groups and $\Zhat_\ell$-modules.
+\end{proposition}
+
+\begin{proof}
+Filter $X$ by simply connected finite subcomplexes; spheres are compact, so $\pi_j\overline X_\ell=\colim_i\pi_j(X_i)^\wedge_\ell=\colim_i\pi_jX_i\otimes\Zhat_\ell=\pi_jX\otimes\Zhat_\ell$.
+\end{proof}
+
+Formal completion is the right operation on rational spaces, whose profinite completion is contractible.
+The homotopy groups of $(X_{(0)})^-$ are enormous $\Q$-vector spaces, and the extra structure that makes them manageable is their $\Zhat$-module structure.
+
+\subsection{The arithmetic square}
+Call $X$ \emph{of finite type} if it is homotopy equivalent to a CW complex with finitely many cells in each dimension.
+
+\begin{proposition}\label{prop:adeletype}
+Let $X$ be simply connected of finite type.
+There is a natural equivalence $(X_{(0)})^-\simeq(\hX)_{(0)}$ inducing an isomorphism of $\Af$-modules on homotopy groups, $\pi_*\cong\pi_*X\otimes\Af$.
+\end{proposition}
+
+\begin{proof}
+For a filtration of $X$ by simply connected finite subcomplexes $X_i$, the map $\overline X=\hocolim\widehat X_i\to\hX$ is an equivalence, since both sides have homotopy $\pi_*X\otimes\Zhat$ by Theorem~\ref{thm:completionfg} and Proposition~\ref{prop:formalcompletion}.
+Formal completion of the rationalization $X\to X_{(0)}$ gives $\hX\simeq\overline X\to(X_{(0)})^-$, which on homotopy is $\pi_*X\otimes\Zhat\to\pi_*X\otimes\Zhat\otimes\Q$.
+Hence $(X_{(0)})^-$ is a rationalization of $\hX$, with the correct $\Zhat$-module structure on homotopy, hence the correct $\Af$-module structure.
+\end{proof}
+
+\begin{definition}
+The \emph{adelic type} of $X$ is $X_{\mathbb A}=(\hX)_{(0)}\simeq(X_{(0)})^-$.
+\end{definition}
+
+\begin{theorem}[Arithmetic square]\label{thm:arithmeticsquare}
+For $X$ simply connected of finite type the square
+\[
+\begin{tikzcd}
+X\arrow[r]\arrow[d] & \hX=\prod_p\hX_p\arrow[d]\\
+X_{(0)}\arrow[r] & X_{\mathbb A}
+\end{tikzcd}
+\]
+is a homotopy pullback.
+The homotopy type of $X$ is determined by the triple $(X_{(0)},\hX,e)$, where $e\colon(X_{(0)})^-\simeq(\hX)_{(0)}$ is an equivalence inducing $\Zhat$-module isomorphisms on homotopy, and two triples $(X_{(0)},\hX,e)$ and $(Y_{(0)},\widehat Y,f)$ determine equivalent spaces if and only if there are equivalences $u\colon X_{(0)}\to Y_{(0)}$ and $v\colon\hX\to\widehat Y$ with $f\circ u^-\simeq v_{(0)}\circ e$.
+\end{theorem}
+
+\begin{proof}
+On homotopy groups the square is $\pi_*X$ tensored with the square of Proposition~\ref{prop:arithsquare}, which is a fibre square of groups for every coefficient group.
+As in the proof of Theorem~\ref{thm:fracture}, the Mayer--Vietoris sequence of the homotopy pullback breaks into short exact sequences, and the comparison map from $X$ is a weak equivalence.
+The statement about triples is the universal property of homotopy pullbacks.
+\end{proof}
+
+\begin{remark}
+For a finite set of primes $S$ put $\hX_S=\prod_{p\in S}(\hX_p)_{(0)}\times\prod_{p\notin S}\hX_p$.
+These form a directed system and $X_{\mathbb A}\simeq\hocolim_S\hX_S$, compatibly with the $\Zhat$-module structures, which reflects the description of $\Af$ as the restricted product of the $\Q_p$ with respect to the $\Zhat_p$.
+The square of Theorem~\ref{thm:arithmeticsquare} has a local analogue for each set of primes $\ell$,
+\[
+\begin{tikzcd}
+X_{(\ell)}\arrow[r]\arrow[d] & \hX_\ell\arrow[d]\\
+X_{(0)}\arrow[r] & (\hX_\ell)_{(0)}
+\end{tikzcd}
+\]
+and for $\ell=\{p\}$ the corner $(\hX_p)_{(0)}$ is the form of $X$ over the $p$-adic numbers.
+\end{remark}
+
+\begin{remark}[Realization]\label{rem:realization}
+The arithmetic square reduces the question of which profinite homotopy types are completions of spaces of finite type to rational homotopy theory.
+Given a simply connected $Y$ with finitely generated $\Zhat$-modules as homotopy groups, form $Y_{(0)}$; a space $X$ with $\hX\simeq Y$ exists if and only if there is a rational space $X_{(0)}$ with finite dimensional homotopy groups and a map $c\colon X_{(0)}\to Y_{(0)}$ inducing $\pi_*X_{(0)}\otimes\Zhat\cong\pi_*Y_{(0)}$ as $\Zhat$-modules, and then $X$ is the homotopy pullback of $c$ and $Y\to Y_{(0)}$.
+For a complex algebraic variety this describes what must be added to the \'etale homotopy type to recover the classical homotopy type.
+In the opposite direction, every simply connected space with finitely generated $\Q$-vector spaces as homotopy groups is the rationalization of a space of finite type: one realizes a local cell structure, choosing at each step an attaching map in the lattice $\operatorname{im}(\pi_kX_{n-1}\to\pi_kY_{n-1})$, which is possible after rescaling the localization map of the sphere.
+\end{remark}
+
+\begin{remark}[Genus]
+Two simply connected spaces of finite type with equivalent localizations at every prime and equivalent rationalizations have the same \emph{genus}.
+By Theorem~\ref{thm:arithmeticsquare}, the spaces in the genus of $X$ are indexed by the double cosets of the group of equivalences of $(X_{(0)})^-$ preserving the $\Zhat$-structure, modulo the images of the self-equivalences of $X_{(0)}$ and of $\hX$.
+This is the starting point of the work of Mislin and Wilkerson on the genus of $H$-spaces~\cite{WilkersonGenus}.
+\end{remark}
+
+
+% ═════════════════════════════════════════════════════════════════════════════
+\section{Local and adic spherical fibrations}\label{sec:spherical}
+% ═════════════════════════════════════════════════════════════════════════════
+
+\subsection{The classifying spaces}
+A \emph{local spherical fibration} is a Hurewicz fibration $E\to B$ with fibre $S^{n-1}_{(\ell)}$, $n>1$; it is \emph{oriented} by a class $U\in H^n(E\to B;\Zl)$, the cohomology of the pair formed by the mapping cylinder and $E$, restricting to a generator of $H^n(S^{n-1}_{(\ell)}\to\mathrm{pt};\Zl)\cong\Zl$.
+An \emph{$\ell$-adic spherical fibration} has fibre $\widehat S^{n-1}_\ell$, and orientations take values in $\Zhat_\ell$.
+
+For $\ell$ the set of all primes the theory is classical.
+Fibre homotopy classes of $S^{n-1}$-fibrations are classified by $BG_n$, where $G_n$ is the monoid of self-maps of $S^{n-1}$ of degree $\pm1$ and $\Omega BG_n\simeq G_n$ as $A_\infty$-spaces~\cite{Stasheff}.
+The oriented theory is classified by the universal cover $BSG_n$, the covering involution reverses orientations, fibrewise suspension gives $BG_n\to BG_{n+1}$, and $BG=\colim BG_n$ classifies the stable theory.
+Since the homotopy groups $\pi_{i+1}BG=\pi_i^s$ are finite, a map from an infinite complex to $BG$ is an element of the limit of the homotopy classes on the skeleta, by Proposition~\ref{prop:compactfunctor}.
+The stable involution is trivial and $BG\simeq K(\Z/2,1)\times BSG$.
+In low dimensions $BG_1=\RP^\infty$, $BSG_1\simeq\mathrm{pt}$ and $BSG_2\simeq\CP^\infty\simeq BSO_2$.
+
+For proper sets of primes the fibres are infinite complexes, and for adic spheres they are uncountable, so Stasheff's construction does not apply directly.
+Dold's theory of quasifibrations gives representing spaces for theories of fibrations with arbitrary fibre~\cite{Dold}: there are connected CW complexes $B^n_{(\ell)}$ and $\widehat B^n_\ell$ with
+\[
+\{S^{n-1}_{(\ell)}\text{-fibrations over }X\}\cong[X,B^n_{(\ell)}]_{\mathrm{free}},\qquad \{\widehat S^{n-1}_\ell\text{-fibrations over }X\}\cong[X,\widehat B^n_\ell]_{\mathrm{free}}.
+\]
+
+\begin{theorem}\label{thm:sphericalmain}
+\begin{enumerate}[label=\textup{(\arabic*)}]
+\item Fibrewise localization and completion define natural transformations of theories, represented by maps
+\[
+\begin{tikzcd}[column sep=small]
+BG_n\arrow[r]\arrow[rd] & B^n_{(\ell)}\arrow[d]\\
+& \widehat B^n_\ell .
+\end{tikzcd}
+\]
+\item On fundamental groups these maps are the inclusions of units $\{\pm1\}=\Z\units\to\Zl\units\to\Zhat_\ell\units$.
+\item The universal covers form the diagram $BSG_n\to(BSG_n)_{(\ell)}\to(BSG_n)^\wedge_\ell$ of localization and completion, which classifies the oriented theories, and the deck transformations act on the oriented theories by $(\xi,U)\mapsto(\xi,\alpha U)$.
+\end{enumerate}
+In particular $\pi_0\Aut(S^{n-1}_{(\ell)})=\Zl\units$, $\pi_0\Aut(\widehat S^{n-1}_\ell)=\Zhat_\ell\units$, and the identity components are $(SG_n)_{(\ell)}$ and $(SG_n)^\wedge_\ell$.
+\end{theorem}
+
+\begin{proof}
+For (1), let $\xi$ be a fibration over a simplex $\sigma$ with simple fibre $F$, and suppose a fibrewise localization $\xi|\partial\sigma\to\partial\xi'$ is given.
+Choosing a trivialization $\xi\cong\sigma\times F$, the extension of $\partial\xi'$ to $\sigma\times F_{(\ell)}$ is obstructed by classes in $H^*(\partial\sigma\times(F_{(\ell)},F);\pi_*F_{(\ell)})$, which vanish because $\pi_*F_{(\ell)}$ is a $\Zl$-module and $H_*(F_{(\ell)},F;\Zl)=0$.
+Proceeding over the cells of the base we localize any fibration with simple fibre fibrewise; the result is homotopically locally trivial and determines a Hurewicz fibration.
+The same argument applies to fibrewise completion whenever $H^*(\widehat F_\ell,F;\Zhat_\ell)$ vanishes, which holds for $F=S^{n-1}$ and $F=S^{n-1}_{(\ell)}$.
+
+For (2) and (3), let $S_R$ denote $S^{n-1}$, $S^{n-1}_{(\ell)}$ or $\widehat S^{n-1}_\ell$, with $R=\Z,\Zl,\Zhat_\ell$, and consider the sequence of theories
+\[
+\{\text{oriented }S_R\text{-fibrations}\}\to\{S_R\text{-fibrations}\}\to H^1(-;R\units),
+\]
+forgetting the orientation and taking the local system $\widetilde H_{n-1}$ of the fibres.
+A fibration over $S^{i+1}$ is obtained by clutching along a map $S^i\to\Aut S_R$.
+In the sequence $\pi_0\Aut S_R\to[S_R,S_R]\to\pi_{n-1}S_R\to H_{n-1}S_R$ the first map is injective and the others are isomorphisms, so $\pi_0\Aut S_R=R\units$.
+An orientation embeds the trivial fibration $S_R\to\mathrm{pt}$, and over a connected base this embedding determines the orientation, so oriented fibrations over spheres are based fibrations.
+Hence the oriented classifying space is the universal cover, and the action of $\pi_1$ is the action of the units on orientations.
+
+Finally the map $SG_n\to(\Aut\widehat S^{n-1}_\ell)_1$ is completion on homotopy.
+In the diagram formed by the evaluation fibrations $(\Omega^{n-1}S^{n-1})_1\to SG_n\to S^{n-1}$ and their completed analogues, the map of bases completes homotopy groups.
+An element of $\pi_i$ of the space of based self-maps of $\widehat S^{n-1}_\ell$ of degree one is a homotopy class $S^i\wedge\widehat S^{n-1}_\ell\to\widehat S^{n-1}_\ell$, and $[\widehat S^{n+i-1}_\ell,\widehat S^{n-1}_\ell]\cong\pi_{n+i-1}S^{n-1}\otimes\Zhat_\ell$, so the map of fibres also completes homotopy.
+The obstructions to constructing the exact homotopy sequence on the completed side lie in $H^k((\sigma^{i+1},\partial\sigma^{i+1})\times(S_R,\mathrm{pt});\pi_{k-1}S_R)$, which vanishes except for $k=n+i$, where it is the homotopy of the fibre.
+Hence $SG_n\to(\Aut\widehat S^{n-1}_\ell)_1$ completes homotopy groups, and the localization statement is proved in the same way.
+\end{proof}
+
+\subsection{The Galois symmetry}
+The units of $\Zhat_\ell$ act on $(BSG_n)^\wedge_\ell$ by deck transformations of $\widehat B^n_\ell$, and compatibly the units of $\Zl$ act on $(BSG_n)_{(\ell)}$.
+For $\ell=\{p\}$,
+\[
+\Zp\units\cong\Z/2\oplus\bigoplus_{q\ne p}\Z,\qquad \Zhat_p\units\cong\Z/(p-1)\oplus\Zhat_p\ (p>2),\qquad \Zhat_2\units\cong\Z/2\oplus\Zhat_2,
+\]
+the free summand of $\Zp\units$ being generated by the primes $q\ne p$.
+In the complete theory these independent symmetries of the local theory merge into one compact, and for $p$ odd topologically cyclic, group.
+
+The homotopy groups of $BSG_n$ are finite except $\pi_nBSG_n\supseteq\Z$ for $n$ even and $\pi_{2n-2}BSG_n\supseteq\Z$ for $n$ odd, the first $n-1$ of them being stable.
+Accordingly, $(BSG_n)^\wedge_p$ has the $p$-torsion of these groups and one $\Zhat_p$.
+The units act trivially on the low dimensional stable groups and non-trivially on the higher ones; for $n$ even they act on $\pi_n(BSG_n)^\wedge_p/\mathrm{torsion}\cong\Zhat_p$ through the natural action.
+On the unstable groups the action measures the effect of maps of degree $\alpha$ on the homotopy of spheres, and is computable up to extension by Whitehead products and Hopf invariants.
+
+\subsection{The rational and the stable theories}
+
+\begin{proposition}\label{prop:rationalspherical}
+Oriented $S^{n-1}_{(0)}$-fibrations are classified by an Euler class in $H^n(-;\Q)$ for $n$ even and by a Hopf class in $H^{2n-2}(-;\Q)$ for $n$ odd; that is, $(BSG_n)_{(0)}\simeq K(\Q,n)$ or $K(\Q,2n-2)$.
+The units $\Q\units$ act through the natural action for $n$ even and through its square for $n$ odd.
+\end{proposition}
+
+\begin{proof}
+Consider the evaluation fibration $(\Omega^{n-1}S^{n-1})_1\to SG_n\to S^{n-1}$ rationally.
+For $n$ even, $S^{n-1}_{(0)}=K(\Q,n-1)$ and the fibre is rationally trivial, so $(SG_n)_{(0)}\simeq K(\Q,n-1)$.
+For $n$ odd, $S^{n-1}_{(0)}$ has rational homotopy $\Q$ in degrees $n-1$ and $2n-3$, and the fibre has $\Q$ in degree $n-2$; the connecting map $\pi_{n-1}S^{n-1}\to\pi_{n-2}(\Omega^{n-1}S^{n-1})=\pi_{2n-3}S^{n-1}$ is the Whitehead square $[\iota,\iota]$, which is rationally non-zero.
+Hence only $\pi_{2n-3}(SG_n)\otimes\Q=\Q$ survives and $(BSG_n)_{(0)}\simeq K(\Q,2n-2)$.
+The generator of degree $2n-2$ is the Hopf invariant, quadratic in the orientation, which gives the action.
+\end{proof}
+
+Comparing $SO_n\to SO_{n+1}\to S^n$ with $(\Omega S^n)_1\to SG_{n+1}\to S^n$ one obtains an equivalence of rational fibration sequences
+\begin{gather*}
+\bigl[SG_{2n}\to SG_{2n+1}\to SG_{2n+1}/SG_{2n}\to BSG_{2n}\to BSG_{2n+1}\bigr]_{(0)}\\
+\simeq\bigl[S^{2n-1}\to S^{4n-1}\to S^{2n}\to K(\Q,2n)\to K(\Q,4n)\bigr]_{(0)}
+\end{gather*}
+in which the maps on the right are the Whitehead product, the Euler class and the cup square.
+Stably the oriented rational theory is trivial, and the unoriented stable rational theory is $H^1(-;\Q\units)$.
+
+\begin{theorem}[Stable theories]\label{thm:stablespherical}
+\begin{enumerate}[label=\textup{(\arabic*)}]
+\item The stable oriented $\ell$-local and $\ell$-adic theories coincide with $[-,\prod_{p\in\ell}(BSG)_{(p)}]$.
+\item The unoriented stable theories are $[-,K(\Zl\units,1)\times\prod_{p\in\ell}BSG_{(p)}]$ and $[-,K(\Zhat_\ell\units,1)\times\prod_{p\in\ell}BSG_{(p)}]$.
+\item The units act trivially on the stable oriented theories.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Since $BSG$ has finite homotopy groups, $BSG\simeq\prod_p BSG_{(p)}$ and $\colim_n(BSG_n)_{(\ell)}\simeq\colim_n(BSG_n)^\wedge_\ell$, because the only rational homotopy of $BSG_n$ moves to infinity.
+For (2), a coefficient system $\alpha\in H^1(-;\Zhat_\ell\units)$ determines an $\widehat S^1_\ell$-fibration through the action of the units on a functorial model of $K(\Zhat_\ell,1)$, and its fibre join with an oriented local fibration, completed fibrewise, is an $\ell$-adic fibration twisted by $\alpha$.
+This gives a map $K(\Zhat_\ell\units,1)\times BSG_{(\ell)}\to\colim\widehat B^n_\ell$ inducing isomorphisms on homotopy.
+For (3), the fibre join $S^1_{(\ell)}\ast\gamma$ admits automorphisms changing the orientation by any unit of $\Zl$, through the automorphisms of $S^1_{(\ell)}$; by continuity the dense subgroup $\Zl\units$ of $\Zhat_\ell\units$ determines the action of the whole group.
+\end{proof}
+
+Part (3) is a purely homotopy theoretical form of the Adams conjecture: changing the orientation of a stable spherical fibration by a unit does not change its fibre homotopy type.
+The Adams conjecture proper (Theorem~\ref{thm:adamsconj}) asserts that this action, transported to vector bundles through the Galois symmetry of the Grassmannians, is the action of the Adams operations.
+
+\subsection{Inertia of intrinsic stable fibre homotopy types}
+Let $B_0\to B_1\to\cdots$ be a sequence of spaces with telescope $B_\infty$, and let $\gamma_n$ be $S^{d_n}$-fibrations over $B_n$ with $i^*\gamma_{n+1}\simeq\gamma_n\ast S^{d_{n+1}-d_n-1}$.
+These determine a stable fibration $\gamma\colon B_\infty\to BG$, independent of the chosen equivalences because $[B_\infty,BG]=\lim[B_n,BG]$.
+We call $\gamma$ \emph{intrinsic to the filtration} if for arbitrarily large $n$ the composite of the canonical section $B_n\to i^*\gamma_{n+1}$ with the map $i^*\gamma_{n+1}\to\gamma_{n+1}$ is an equivalence over the $d(n)$-skeleton, with $d(n)-d_n\to\infty$.
+The stable bundles $BO$, $BU$, $BSp$, $BPL$, $BTop$ and $BG$ are intrinsic to their natural filtrations, and for $BO$ the condition holds exactly: the fibre of $BO_{n-1}\to BO_n$ is the sphere bundle of the universal bundle.
+The same definition applies to local and adic fibrations.
+
+\begin{theorem}[Inertia]\label{thm:inertia}
+Let $\gamma$ be a stable spherical fibration over $B_\infty$, ordinary, local or adic, intrinsic to the filtration $\{B_n\}$.
+Every filtered self-equivalence $A_\infty=\colim A_n$ of $B_\infty$ preserves the fibre homotopy type of $\gamma$: $\gamma\circ A_\infty\simeq\gamma$.
+\end{theorem}
+
+\begin{proof}
+For simplicity of notation take $d_n=n$ and $d(n)=2n$.
+Let $F_n\to B_n\to B_{n+1}$ be the fibre sequence; we may take $A_{n+1}$ skeleton-preserving, $A_n$ fibre-preserving over $A_{n+1}$, and the comparison $e\colon B_n\to\gamma_{n+1}$ fibre-preserving over the identity of $B_{n+1}$.
+Restricting everything to the parts lying over the $n$-skeleton of $B_{n+1}$ and then to $2n$-skeleta, $e$ becomes an equivalence by the intrinsic hypothesis, while $\gamma_{n+1}$ restricted to the $n$-skeleton, a fibration with fibre $S^n$, is equivalent to its own $2n$-skeleton.
+Transporting the restriction of $A_n$ through $e$ gives a self-equivalence of $\gamma_{n+1}$ restricted to the $n$-skeleton of $B_{n+1}$ covering $A_{n+1}$.
+This is a fibre homotopy equivalence between $\gamma_{n+1}$ and $A_{n+1}^*\gamma_{n+1}$ over the $n$-skeleton, and letting $n\to\infty$ gives the result.
+\end{proof}
+
+\begin{corollary}
+Every self-equivalence of $BG$ preserving the filtration $\{BG_n\}$ is homotopic to the identity.
+\end{corollary}
+
+The inverse of the $H$-space structure is a self-equivalence of $BG$ not homotopic to the identity; it does not preserve the filtration.
+For $BO$, $BPL$ and $BG$ the filtered automorphisms are the operations on bundles that are bijective and preserve the geometric fibre dimension.
+Thus geometric automorphisms of bundle theories preserve stable fibre homotopy types.
+
+\subsection{Local fibrations from adic ones}
+The arithmetic square for $BSG_n$ gives, for $n$ even, a homotopy pullback
+\[
+\begin{tikzcd}
+(BSG_n)_{(\ell)}\arrow[r]\arrow[d,"e"'] & (BSG_n)^\wedge_\ell\arrow[d,"\widehat e"]\\
+K(\Q,n)\arrow[r] & K(\Q\otimes\Zhat_\ell,n)
+\end{tikzcd}
+\]
+and similarly for $n$ odd with the Hopf class in degree $2n-2$.
+
+\begin{corollary}\label{cor:rationality}
+An oriented $\widehat S^{n-1}_\ell$-fibration is the completion of an $S^{n-1}_{(\ell)}$-fibration if and only if its Euler class, for $n$ even, or its Hopf class, for $n$ odd, is rational in $H^*(-;\Q\otimes\Zhat_\ell)$.
+Equivalently, a local fibration is a family of $\widehat S^{n-1}_p$-fibrations, one for each $p\in\ell$, whose characteristic classes with $\Q_p$ coefficients come from a single rational class.
+\end{corollary}
+
+\subsection{Principal spherical fibrations}
+
+\begin{theorem}\label{thm:loopspheres}
+Let $p$ be an odd prime.
+The $p$-adic sphere $\widehat S^{2n-1}_p$ is equivalent to the loop space of a $p$-complete space if and only if $n\mid p-1$.
+For a set of primes $\ell$ and $n\ge2$, $S^{2n-1}_{(\ell)}$ is a loop space if and only if $n\mid p-1$ for every odd $p\in\ell$, and, when $2\in\ell$, $n\le2$.
+\end{theorem}
+
+\begin{proof}
+Suppose $\widehat S^{2n-1}_p=\Omega B$.
+Then $H^*(B;\F_p)$ is a polynomial algebra on a class $x$ of degree $2n$.
+The unstable condition $\mathcal P^nx=x^p$ and the Adem relations force, through the action of $\mathcal P^1$ on $x$, that $n$ divides $(p-1)p^k$ for some $k$; secondary operations, through Liulevicius's factorization of the cyclic reduced powers~\cite{Liulevicius}, the odd primary analogue of Adams's work on the Hopf invariant, exclude $k>0$.
+
+Conversely suppose $n\mid p-1$.
+The group $\mu_n$ of $n$-th roots of unity lies in $\mu_{p-1}\subset\Zhat_p\units$ by Proposition~\ref{prop:units}, and $\Zhat_p\units$ acts on a functorial model of $K(\Zhat_p,2)$ by cellular homeomorphisms.
+Put $B_n=(K(\Zhat_p,2)_{h\mu_n})^\wedge_p$.
+Since $n$ is prime to $p$, the Serre spectral sequence of $K(\Zhat_p,2)\to K(\Zhat_p,2)_{h\mu_n}\to K(\mu_n,1)$ with $\F_p$ coefficients collapses to the invariants:
+\[
+H^*(B_n;\F_p)=\F_p[x]^{\mu_n}=\F_p[x^n],\qquad\deg x^n=2n,
+\]
+because $\zeta\in\mu_n$ acts on $x$ by multiplication by $\zeta$.
+The fundamental group $\mu_n$ completes to zero, so $B_n$ is simply connected, $(2n-1)$-connected by the Hurewicz theorem, and $\Omega B_n$ is a $p$-complete $(2n-2)$-connected space whose mod $p$ cohomology is a single $\F_p$ in degree $2n-1$, that is, $\Omega B_n\simeq\widehat S^{2n-1}_p$.
+
+For the local statement, if $n\mid p-1$ for all $p\in\ell$, let $B$ be the homotopy pullback of $\prod_{p\in\ell}B^{(p)}_n\to K(\Q\otimes\Zhat_\ell,2n)$ and $K(\Q,2n)\to K(\Q\otimes\Zhat_\ell,2n)$, where $B^{(p)}_n\to K(\Q_p,2n)$ is the rationalization; looping gives the fracture square of $S^{2n-1}_{(\ell)}$.
+At the prime $2$ the statement is Adams's theorem on the Hopf invariant.
+For $n=2$ the statement is consistent with the fact that $S^3$ is a loop space at every prime.
+\end{proof}
+
+Write $P^\infty(n,\ell)$ for the classifying space of $S^{2n-1}_{(\ell)}$.
+Then $H^*(P^\infty(n,\ell);\Zl)$ is polynomial on one generator of degree $2n$, and an orientation of the fibre gives a map $P^\infty(n,\ell)\to(BSG_{2n})_{(\ell)}$ carrying the universal Euler class to the generator.
+For each $p$ and each divisor $n$ of $p-1$ we obtain a principal theory of $p$-adic spherical fibrations; at each odd prime there are as many such theories as divisors of $p-1$, one for each finite subgroup of $\Zhat_p\units$.
+
+\subsection{Thom isomorphism and joins}
+An oriented $S^{n-1}_{(\ell)}$-fibration $\xi\colon E\to X$ with orientation $U$ has a Thom isomorphism $H^i(X;\Zl)\xrightarrow{\cup U}H^{i+n}(E\to X;\Zl)$, proved by induction over the cells of the base.
+Conversely, following Spivak~\cite{Spivak}, if $f\colon A\to X$ and $U\in H^n(A\to X;\Zl)$ induce an isomorphism $H^i(X;\Zl)\to H^{i+n}(A\to X;\Zl)$, and $\pi_1X$ acts trivially on the fibre, then the fibre of $f$ has the $\Zl$-homology of $S^{n-1}_{(\ell)}$, and when it is simple a fibrewise localization produces an oriented $S^{n-1}_{(\ell)}$-fibration.
+The Whitney join of $S^{n-1}_{(\ell)}$- and $S^{m-1}_{(\ell)}$-fibrations is an $S^{n+m-1}_{(\ell)}$-fibration, because $S^{n-1}_{(\ell)}\ast S^{m-1}_{(\ell)}\simeq S^{n+m-1}_{(\ell)}$.
+For adic fibrations only $(\widehat S^{n-1}_\ell\ast\widehat S^{m-1}_\ell)^\wedge_\ell\simeq\widehat S^{n+m-1}_\ell$ holds, so the join must be followed by fibrewise completion.
+
+
+% ═════════════════════════════════════════════════════════════════════════════
+\section{\'Etale homotopy type and Galois symmetry}\label{sec:etale}
+% ═════════════════════════════════════════════════════════════════════════════
+
+The main point of this section is that the profinite completion of the homotopy type of a complex algebraic variety has a purely algebraic construction.
+When the variety is defined over $\Q$, the absolute Galois group acts on the construction, and hence on the profinite homotopy type.
+
+\subsection{Nerves of categories and smallest neighbourhoods}
+The nerve of a small category $\mathcal C$ is the simplicial set whose $n$-simplices are the strings $O_0\to O_1\to\cdots\to O_n$ of composable morphisms; faces compose and degeneracies insert identities.
+We use the following facts.
+If $K$ is a simplicial complex and $\mathcal C(K)$ is its poset of simplices, the nerve of $\mathcal C(K)$ is the barycentric subdivision of $K$.
+A category with a terminal object has contractible nerve, and a category and its opposite have homeomorphic nerves.
+The nerve of a group $\pi$, regarded as a category with one object, is $K(\pi,1)$: its universal cover has the bar resolution as cellular chain complex, hence is acyclic and simply connected.
+
+\begin{proposition}[Lubkin~\cite{Lubkin}]\label{prop:lubkin}
+Let $\mathcal U$ be a finite covering of a finite polyhedron $K$ by open sets with subcomplex complements, contractible members, and locally directed: if $x\in U\cap V$ there is $W\in\mathcal U$ with $x\in W\subseteq U\cap V$.
+Let $\mathcal C(\mathcal U)$ be the poset of \emph{smallest neighbourhoods}, the members of $\mathcal U$ that are the smallest member containing some point.
+Then the nerve of $\mathcal C(\mathcal U)$ is homotopy equivalent to $K$.
+\end{proposition}
+
+\begin{proof}
+Subdivide $K$ so that each simplex lies in a member of $\mathcal C(\mathcal U)$ and the maximal subcomplex $K(U)$ of the barycentric subdivision inside each $U$ is contractible.
+A map $f$ from the nerve to $K$ is defined by sending the vertex $U$ to a vertex of $K(U)$ and extending over the simplices $U_0\subseteq\cdots\subseteq U_n$ inside $K(U_n)$, using contractibility.
+In the other direction, the smallest neighbourhood $U_\sigma$ of the barycentre of a simplex $\sigma$ is the smallest neighbourhood of every interior point of $\sigma$, and $\sigma<\tau$ implies $U_\sigma\subseteq U_\tau$, so $\sigma_1<\cdots<\sigma_n\mapsto U_{\sigma_n}\subseteq\cdots\subseteq U_{\sigma_1}$ defines a simplicial map $g$ from the barycentric subdivision.
+Both composites are carried by contractible subcomplexes, the second by the nerves of subcategories with a terminal object, and are homotopic to the identity by induction over simplices.
+\end{proof}
+
+The proposition extends to coverings by spaces $U$ with $\pi_iU=0$ for $i>1$, replacing each $U$ by its universal cover $\widetilde U\to K$ and allowing all the morphisms of spaces over $K$ between them; the categories then have many morphisms between two objects, and $K$ is still the nerve.
+The examples explain why this is the right generalization.
+The covering $\R\to S^1$, $t\mapsto e^{it}$, gives the category with one object and automorphism group $\Z$, whose nerve is $S^1$.
+For $S^2=\CP^1$ with two points $p,q$, the category $\{e\leftarrow\Z\rightarrow e'\}$ given by $S^2-p$, $S^2-q$ and the universal cover of $S^2-p-q$ has as nerve two cones on $S^1$ glued along $S^1$, which is $S^2$.
+For $\C^2-0$ covered by $\{z_1\ne0\}$, $\{z_2\ne0\}$ and their intersection, the category $\{\Z\leftarrow\Z\oplus\Z\rightarrow\Z\}$ is the decomposition of $S^3$ into two solid tori, and the functor to $\{e\leftarrow\Z\rightarrow e'\}$ realizes the Hopf map.
+For $\CP^n$ and its affine charts one obtains a category modelled on the $n$-simplex, with an object at the barycentre of each face whose automorphism group is free abelian of rank the dimension of the face; its nerve is $\CP^n$, and it is also the $n$-th stage of the Milnor construction of $BS^1$.
+The endofunctor that is the identity on objects and raises automorphisms to the $q$-th power realizes the map $[z_0:\cdots:z_n]\mapsto[z_0^q:\cdots:z_n^q]$, the geometric Frobenius.
+For $\CP^2$ the category has an involution exchanging the two coordinate axes, whose fixed subcategory $\{e\leftarrow\Z\xrightarrow{2}\Z\}$ has nerve $\RP^2$.
+
+These categories use universal covers, which are not algebraic.
+Algebraic geometry provides instead the \emph{\'etale coverings}: families of finite covering maps of Zariski open sets whose images cover the variety.
+For a Zariski covering alone the nerve is a simplex, because non-empty Zariski open sets of an irreducible variety meet; the finite covers recover exactly the profinite completion of the fundamental groups of the Zariski open sets.
+For $\CP^1$ the \'etale covers $S^2-p$, $S^2-q$ and the degree $n$ cover of $S^2-p-q$ give the categories $\{e\leftarrow\Z/n\rightarrow e\}$ with nerves the suspensions $\Sigma K(\Z/n,1)$.
+Their limit, formed with the compact topology of Section~\ref{sec:completion}, has $\widetilde H^2=\lim\Z/n=\Zhat$ and is simply connected: it is $(S^2)^\wedge$.
+
+Two inputs make this work in general: there are enough Zariski open $K(\pi,1)$ neighbourhoods, and for them the lattice of finite \'etale covers computes $\widehat{\pi}_1$.
+The first is due to Artin, after Lefschetz: a smooth projective curve minus finitely many points is a $K(\pi,1)$; a generic linear projection fibres a neighbourhood of a point of a smooth variety $V^n\subseteq\CP^N$ by punctured curves over a neighbourhood in $\CP^{n-1}$; and the total space of a fibration with $K(\pi,1)$ fibre and base is a $K(\pi,1)$.
+The second is the Riemann existence theorem, which algebraizes finite topological covers.
+
+\begin{theorem}[Artin--Mazur~\cite{ArtinMazur}]\label{thm:artinmazur}
+Let $V$ be a normal complex algebraic variety of finite type.
+There is a natural map from the classical homotopy type of $V$ to its \'etale homotopy type, an inverse system of nerves of \'etale hypercoverings, inducing isomorphisms $H^*(V;A)\cong\colim H^*(\text{nerve};A)$ for every finite, possibly twisted, coefficient system $A$.
+\end{theorem}
+
+Combined with Section~\ref{sec:completion}, the limit of the \'etale homotopy type, taken as a compact representable functor, is the profinite completion $\widehat V$ of the classical homotopy type.
+If $V$ is simply connected, $\widehat V=\prod_p\widehat V_p$ and $\pi_*\widehat V=\pi_*V\otimes\Zhat$.
+We call $\widehat V$ the \emph{complete \'etale homotopy type}.
+
+\subsection{The Grassmannians}
+The complex Grassmannians $G_{n,k}(\C)=\GL(n+k,\C)/\GL(n,\C)\times\GL(k,\C)$ are defined over $\Z$, and $\colim_kG_{n,k}(\C)\simeq BU_n$.
+The rational Chern classes give the rationalization $BU_n\to\prod_{i=1}^nK(\Q,2i)$, and the arithmetic square of $BU_n$ is
+\[
+\begin{tikzcd}
+BU_n\arrow[r]\arrow[d] & \prod_p(BU_n)^\wedge_p\arrow[d]\\
+\prod_{i=1}^nK(\Q,2i)\arrow[r] & \prod_{i=1}^nK(\Af,2i).
+\end{tikzcd}
+\]
+For the real Grassmannians we use the complex orthogonal group $O(n,\C)=\{A\in\GL(n,\C):{}^tAA=1\}$, preserving $\sum x_i^2$.
+The inclusions $O(n)\subset O(n,\C)$ and $O(n)\subset\GL(n,\R)$ are homotopy equivalences, the first by Chevalley's description of the complexification of a compact Lie group as a tubular neighbourhood of the compact form, the second by Gram--Schmidt.
+Hence the complex algebraic varieties
+\[
+\widetilde G_{n,k}(\R)=\SO(n+k,\C)/\SO(n,\C)\times\SO(k,\C)
+\]
+have the homotopy type of the oriented real Grassmannians, and $\colim_k\widetilde G_{n,k}(\R)\simeq BSO_n$.
+Its arithmetic square has rational corner $\prod_{i\in S}K(\Q,i)$ with $S=\{4,8,\dots,2n-4,n\}$ for $n$ even and $S=\{4,8,\dots,2n-2\}$ for $n$ odd.
+
+\subsection{The Galois action}
+Let $V$ be defined over $\Q$: it is glued from affine pieces cut out by polynomials with rational coefficients along gluing maps with rational coefficients.
+A field automorphism $\sigma$ of $\C$ fixes $\Q$, so $(z_1,\dots,z_n)\mapsto(z_1^\sigma,\dots,z_n^\sigma)$ preserves the equations and the gluing and defines an automorphism $\sigma\colon V\to V$ of the abstract variety.
+It is wildly discontinuous for the classical topology, but it acts on the system of \'etale coverings by pullback, $\mathcal U\mapsto\sigma^*\mathcal U$, and on the categories $\mathcal C(\sigma^*\mathcal U)\to\mathcal C(\mathcal U)$, hence on the inverse system of nerves and on $\widehat V$.
+The effect on the \'etale homotopy type depends only on the action of $\sigma$ on $\Qbar$, so $\Gal(\Qbar/\Q)$ acts on $\widehat V$ by homeomorphisms of the functor $[-,\widehat V]$.
+A finite \'etale cover is defined over a number field $L$, and the action on it factors through $\Gal(L/\Q)$; there is a cofinal system of covers each separately invariant under the Galois group, and the action of $\Gal(\Qbar/\Q)$ on $\widehat V$ is a limit of actions of finite groups on finite stages.
+For $V$ defined over a number field $K$ the same holds for $\Gal(\Qbar/K)$.
+
+\begin{example}
+For $V=\C-0$ the covers $z\mapsto z^n$ suffice; the covering transformations are $f_\zeta(z)=\zeta z$, $\zeta^n=1$, and $\sigma_*f_\zeta=f_{\zeta^\sigma}$.
+Thus the action on the one-object category $\mu_n$ is the Galois action on roots of unity.
+\end{example}
+
+\begin{proposition}\label{prop:galoisP1}
+The action of $\sigma\in\Gal(\Qbar/\Q)$ on $H^2((\CP^1)^\wedge;\Zhat)\cong\Zhat$ is multiplication by the cyclotomic character $\chi(\sigma)$.
+Consequently $\sigma$ acts on $H^*((\CP^n)^\wedge;\Zhat)=\Zhat[x]/(x^{n+1})$ by $x\mapsto\chi(\sigma)x$.
+\end{proposition}
+
+\begin{proof}
+The cofinal system of categories $\{e\leftarrow\mu_n\rightarrow e\}$ for $\CP^1$ is preserved by $\sigma$, which is the identity on objects and acts by $\zeta\mapsto\zeta^\sigma$ on morphisms.
+The nerve is $\Sigma K(\mu_n,1)$ with $H_2=\mu_n$, and $\lim_nH_2=\lim\mu_n=\Zhat(1)$ is the Tate module, on which $\sigma$ acts by $\chi(\sigma)$.
+The statement for $\CP^n$ follows by naturality from the inclusion of $\CP^1$, a morphism of varieties over $\Q$.
+\end{proof}
+
+The algebraic variety $\CP^1$ has no canonical fundamental class: its algebraic automorphisms permute the generators of $H_2(\widehat{\CP^1};\Zhat)$ freely.
+The classical topology fixes the orientation up to sign, and the choice of a square root of $-1$ fixes the sign.
+
+\begin{corollary}\label{cor:galoischern}
+The group $\Gal(\Qbar/\Q)$ acts on the cohomology of the completed classifying spaces through its abelianization $\chi$, by
+\[
+c_i\mapsto\chi(\sigma)^ic_i\text{ on }H^*((BU_n)^\wedge;\Zhat),\qquad p_i\mapsto\chi(\sigma)^{2i}p_i,\quad e\mapsto\chi(\sigma)^ne\text{ on }H^*((BSO_{2n})^\wedge;\Zhat)\otimes\Q,
+\]
+and trivially on $H^*(BSO_n;\F_2)$.
+\end{corollary}
+
+\begin{proof}
+For $BU_1=\CP^\infty$ this is Proposition~\ref{prop:galoisP1}.
+The map $(\CP^\infty)^n\to BU_n$ is a morphism of ind-varieties over $\Q$ and carries $c_i$ to the elementary symmetric functions, which gives the first formula.
+For $BSO_{2n+1}$ and $BSO_{2n}$ use complexification $BSO_m\to BU_m$, surjective on rational cohomology except for odd powers of $e$, and the maps $(BSO_2)^n\to BSO_{2n}$, injective on $H^{2n}$; complexification multiplies degrees by two, giving $\chi^{2i}$ on $p_i$, and $e$ restricts to the product of the generators of the factors $BSO_2=\CP^\infty$.
+Any action on $H^*(\RP^\infty;\F_2)$ is trivial, and $H^*(BSO_n;\F_2)$ injects into $H^*((\RP^\infty)^n;\F_2)$.
+\end{proof}
+
+For each prime $q$ there are Frobenius elements $F_q\in\Gal(\Qbar/\Q)$, with $\chi(F_q)=q$ in $\Zhat_p\units$ for $p\ne q$.
+Hence $F_q$ acts on the $p$-adic cohomology of the Grassmannians by $c_i\mapsto q^ic_i$: the eigenvalues are integers of absolute value $q^{k/2}$ in degree $k$.
+The Weil conjectures, proved by Deligne~\cite{DeligneWeil}, assert that for every smooth projective variety with good reduction at $q$ the eigenvalues of $F_q$ on the $p$-adic cohomology of degree $k$ are algebraic integers, independent of $p$, of absolute value $q^{k/2}$.
+For the Grassmannians this follows from the fact that the cohomology is generated by algebraic cycles, the Schubert varieties: the top homology of a $k$-dimensional subvariety is cyclic and $F_q$ multiplies it by $q^k$.
+
+\subsection{Galois action on $K$-theory}
+The completions $BU^\wedge=\hocolim_n(BU_n)^\wedge$ and $BO^\wedge$ classify profinite $K$-theory of finite complexes, $\widetilde K(X)^\wedge\cong[X,BU^\wedge]$, and for infinite complexes we take the limit over finite subcomplexes.
+Since $\Gal(\Qbar/\Q)$ acts at each level, it acts on $K(X)^\wedge$ and $\KO(X)^\wedge$.
+
+The Adams operations $\psi^k$, defined through Newton polynomials in the exterior powers, are ring endomorphisms with $\psi^k(\eta)=\eta^k$ on line bundles and $\psi^k\psi^l=\psi^{kl}$.
+On $K(X)^\wedge=\prod_pK(X)^\wedge_p$ the $p$-component of $\psi^k$ is invertible if $p\nmid k$ and topologically nilpotent on reduced $K$-theory if $p\mid k$.
+The \emph{invertible part} of $\psi^k$ is the operation that agrees with $\psi^k$ on the $p$-components with $p\nmid k$ and is the identity on the others.
+It corresponds to the element $\mu_k\in\Zhat\units=\prod_p\Zhat_p\units$ whose $p$-component is $k$ if $p\nmid k$ and $1$ if $p\mid k$.
+
+\begin{theorem}\label{thm:galoisK}
+The action of $\Gal(\Qbar/\Q)$ on profinite real and complex $K$-theory factors through $\chi$, and $\mu_k\in\Zhat\units$ acts as the invertible part of $\psi^k$.
+\end{theorem}
+
+\begin{proof}
+Let $B$ be $BU$ or $BSO$.
+We claim that two self-maps of $\widehat B$ are homotopic if and only if they induce the same map on $H^*(\widehat B;\Zhat)\otimes\Q$.
+Granting this, the theorem follows from Corollary~\ref{cor:galoischern}, since $\psi^k$ acts on $H^{2i}$ through $k^i$, as the properties $\psi^k\eta=\eta^k$, additivity and compatibility with complexification show.
+For $BO$ we use the splitting $BO\simeq BSO\times\RP^\infty$ given by the algebraic maps $BO(1,\C)\to BO(\infty,\C)$, $BSO(\infty,\C)\to BO(\infty,\C)$ and Whitney sum; both the Galois action and $\psi^k$ respect it, and every self-equivalence of $\RP^\infty$ is homotopic to the identity.
+For the claim, by Anderson and Atiyah $[B,B]$ is the limit of the finitely generated groups $[B_\alpha,B]$ over finite subcomplexes and the Pontryagin character $\ph\colon[B,B]\to\prod_iH^{4i}(B;\Q)$ is injective.
+If $T_\alpha$ is the torsion of $[B_\alpha,B]$, injectivity in the limit gives $\lim T_\alpha=0$; tensoring with $\Zhat$ and passing to the limit,
+\[
+[\widehat B,\widehat B]=\lim_\alpha[B_\alpha,B]\otimes\Zhat\hookrightarrow\lim_\alpha\prod_iH^{4i}(B_\alpha;\Q)\otimes\Zhat=\prod_iH^{4i}(\widehat B;\Zhat)\otimes\Q,
+\]
+which is the completed Pontryagin character.
+\end{proof}
+
+Thus the invertible parts of the Adams operations extend to the Grassmannians and to the whole category of profinite homotopy types and maps coming from varieties over $\Q$, as the restriction to a dense subset of the action of $\Zhat\units$.
+The nilpotent parts do not extend.
+
+\begin{proposition}\label{prop:nopsi2}
+For $n$ large there is no self-map of $G_{2,n}(\C)^\wedge_2$ compatible with $\psi^2$ on $BU^\wedge_2$.
+\end{proposition}
+
+\begin{proof}
+Suppose $\psi^p$ is defined on $(BU_2)^\wedge_p$, compatibly with $K$-theory.
+On $(BU_2)^\wedge_q$, $q\ne p$, it is defined by any lift of $\mu_p$ to the Galois group, and on $(BU_2)_{(0)}=K(\Q,2)\times K(\Q,4)$ by $c_1\mapsto pc_1$, $c_2\mapsto p^2c_2$.
+The arithmetic square assembles these into a self-map of $BU_2$ compatible with $c_1\colon BU_2\to K(\Z,2)$, hence a self-map of the fibre $BSU_2=\HP^\infty$ of degree $p^2$ on $H^4$.
+For $p=2$ this is impossible: a map of the quaternionic plane of degree $d$ on $S^4=\HP^1$ satisfies $d(d-1)\equiv0\pmod{24}$, by a cell argument of Arkowitz and Curjel or by the signature formula on a transverse preimage, and $d=4$ fails.
+\end{proof}
+
+\begin{corollary}\label{cor:HP}
+The degrees on $\HP^1=S^4$ of the self-maps of $\HP^\infty$ are exactly $0$ and the odd squares.
+\end{corollary}
+
+\begin{proof}
+That the degree is zero or an odd square was shown by Feder and Gitler~\cite{FederGitler}, after partial results of Berstein, Stong, Smith and Cooke.
+For the maps, by the argument of Proposition~\ref{prop:nopsi2} it suffices to construct $\psi^p$ on $(BU_2)^\wedge_p$ for odd $p$; composites then realize all odd squares.
+Let $N$ be the normalizer of the maximal torus in $U_2$, an extension $1\to S^1\times S^1\to N\to\Z/2\to1$.
+For $p$ odd, $H^*(BN;\F_p)$ is the invariant part of $H^*(BS^1\times BS^1;\F_p)$, which is $H^*(BU_2;\F_p)$, and $\pi_1BN=\Z/2$ completes to zero; hence $(BN)^\wedge_p\simeq(BU_2)^\wedge_p$.
+The $k$-th power map of the torus normalizes $N$, so $BN$ carries self-maps $\psi^k$ for all $k$.
+\end{proof}
+
+The same argument gives $(BU_n)^\wedge_p\simeq(BN(T^n))^\wedge_p$ for $p>n$.
+
+\begin{corollary}\label{cor:psip}
+For $n<p$ there are self-maps $\psi^p$ of $(BU_n)^\wedge_p$ and $(BSU_n)^\wedge_p$ inducing multiplication by $p^i$ on $H^{2i}$.
+\end{corollary}
+
+For $n>1$ these are the first maps between classifying spaces of compact connected Lie groups that are not induced by homomorphisms; for $SU_2=S^3$ this is direct.
+Sullivan conjectured that $\psi^p$ does not exist on $(BU_p)^\wedge_p$.
+Jackowski, McClure and Oliver~\cite{JMO} showed that for a compact connected simple Lie group $G$, a self-map of $BG^\wedge_p$ inducing $\psi^k$ with $p\mid k$ exists if and only if $p$ does not divide the order of the Weyl group; in particular there is no $\psi^p$ on $(BSU_p)^\wedge_p$.
+
+\begin{remark}[Exotic $p$-adic groups]
+For $n<p$, $B N(T^n)=(\prod_{i=1}^nBS^1)\times_{\Sigma_n}E\Sigma_n$.
+Replacing $BS^1=K(\Z,2)$ by the classifying spaces $B_\lambda=(K(\Zhat_p,2)_{h\mu_\lambda})^\wedge_p$ of Theorem~\ref{thm:loopspheres}, for $\lambda\mid p-1$, gives
+\[
+U(n,\lambda)=\Omega\Bigl(\bigl(\textstyle\prod_{i=1}^nB_\lambda\bigr)\times_{\Sigma_n}E\Sigma_n\Bigr)^\wedge_p,\qquad n<p.
+\]
+For $\lambda=1$ this is the $p$-adic unitary group $U_n$, for $\lambda=2$ the $p$-adic symplectic group $Sp_n$, and for other divisors new finite dimensional $p$-adic loop spaces.
+They are the first instances of the $p$-compact groups of Dwyer and Wilkerson~\cite{DwyerWilkerson}, and their classifying spaces realize the polynomial algebras of invariants of the reflection groups $\mu_\lambda\wr\Sigma_n$ in the sense of Clark and Ewing~\cite{ClarkEwing}.
+\end{remark}
+
+\subsection{The Adams conjecture}
+
+\begin{theorem}\label{thm:adamsconj}
+For $\sigma\in\Gal(\Qbar/\Q)$ and every $n$, the diagram
+\[
+\begin{tikzcd}[column sep=small]
+(BO_n)^\wedge\arrow[rr,"\sigma"]\arrow[rd] && (BO_n)^\wedge\arrow[ld]\\
+& (BG_n)^\wedge &
+\end{tikzcd}
+\]
+commutes up to homotopy, and similarly for $BU_n$.
+Hence, for a finite complex $X$ and $x\in\KO(X)$, the stable fibre homotopy type of $\alpha(x)$, $\alpha\in\Zhat\units$, equals that of $x$, and $k^N(\psi^kx-x)$ has trivial image in $J(X)\subseteq[X,BG]$ for $N$ large.
+\end{theorem}
+
+\begin{proof}
+The universal $S^{n-1}$-bundle over $BSO_n$ is the map $BSO_{n-1}\to BSO_n$, a morphism of ind-varieties over $\Q$, and completion of this map is the completed universal spherical fibration, with fibre $\widehat S^{n-1}$.
+The Galois element $\sigma$ acts compatibly on $(BSO_{n-1})^\wedge$ and $(BSO_n)^\wedge$, so it lifts to a self-equivalence of the completed universal spherical fibration covering $\sigma$.
+Thus $\sigma^*$ of the completed universal fibration is fibre homotopy equivalent to it, which is the unstable statement; in the oriented theory the orientation may be multiplied by a unit, which is invisible in $(BG_n)^\wedge$.
+This is the inertia theorem~\ref{thm:inertia} in the exact form available for $BO$, and stably it can also be deduced from it together with Theorem~\ref{thm:stablespherical}: $\widehat B_\infty\simeq K(\Zhat\units,1)\times BSG$, and $\sigma$ restricted to $\RP^\infty$ is the identity.
+For a finite complex $[X,BG]=\prod_p[X,BG^\wedge_p]$ is a product of finite $p$-groups.
+By Theorem~\ref{thm:galoisK}, $\psi^kx$ and $\mu_kx$ agree on the components at $p\nmid k$, so $J(\psi^kx-x)$ is concentrated at the primes dividing $k$, where it is killed by a power of $k$.
+\end{proof}
+
+\begin{remark}
+For odd primes Sullivan obtained the conjecture in August 1967 from the mere existence of an algebraically defined object with the mod $n$ cohomology of the complex Grassmannians, following a suggestion of Quillen that the characteristic $q$ analogue of the conjecture is immediate~\cite{QuillenRemarks}.
+The $2$-primary case requires the non-projective varieties $\widetilde G_{n,k}(\R)$.
+Quillen~\cite{QuillenAdams} gave a proof through the cohomology of finite general linear groups and Becker and Gottlieb~\cite{BeckerGottlieb} a proof through the transfer.
+The relation $\psi^2\psi^3=\psi^3\psi^2$ produces secondary operations in $K$-theory; in the present picture they are carried by the commutator subgroup of the Galois group, and they vanish on bundles defined over $\Q^{\mathrm{cyc}}$, which generate the $K$-theory of $K(\pi,1)$ for finite $\pi$.
+\end{remark}
+
+\subsection{Frobenius elements on the finite Grassmannians}
+On the infinite Grassmannians the Galois action is abelian and densely populated by Adams operations.
+On the finite Grassmannians the existence of homotopies between maps into them has to be proved by construction, and the arithmetic of the defining equations intervenes.
+Let $G_q\subset\Gal(\Qbar/\Q)$ be a decomposition group at $q$, the Galois group of an algebraic closure of $\Q_q$; it maps onto $\Gal(\overline\F_q/\F_q)=\Zhat$, whose generator is the Frobenius, and the exponential $\Zhat\to\Zhat_p\units$, $F\mapsto q$, has image the closed subgroup $U_q$ generated by $q$.
+
+\begin{theorem}\label{thm:frobenius}
+Let $p\ne q$ be primes, with $q\ne2$ when $p$ is odd and the Grassmannian is a real Grassmannian of odd type.
+The action of $G_q$ on the $p$-adic completion of a finite Grassmannian factors through $U_q\subseteq\Zhat_p\units$.
+In particular the Frobenius at $q$ defines a canonical operation $\psi^q$ on the $p$-adic theory of vector bundles of fixed dimension and codimension, generating a group isomorphic to $U_q$.
+\end{theorem}
+
+\begin{proof}
+The Grassmannians have good reduction at $q$: $\GL(n+k,\overline\F_q)/\GL(n,\overline\F_q)\times\GL(k,\overline\F_q)$ is smooth of the same dimension.
+By Artin and Mazur the $p$-adic part of the \'etale homotopy type is then computed in characteristic $q$, and the action of $G_q$ factors through $\Zhat=\Gal(\overline\F_q/\F_q)$.
+On cohomology $\Zhat$ acts through $r\colon\Zhat\to U_q$, $F\mapsto q$, and it remains to show that $\pi=\ker r$ acts trivially on $X$, the $p$-adic completion.
+The action of $\pi$ is a limit of actions of finite quotients $\pi_\alpha$ on simply connected nerves $N_\alpha$ by cellular homeomorphisms; forming $N'_\alpha=(N_\alpha\times E\pi_\alpha)/\pi_\alpha$ and passing to the limit gives a fibration $X\to X'\to K(\pi,1)$.
+Write $\Zhat=\prod_l\Zhat_l$.
+Since $q^{(p-1)p^k}\ne1$, the restriction of $r$ to the factor $\Zhat_p$ is injective, so $\pi$ meets this factor trivially; thus $\pi$ is a profinite group of order prime to $p$, and its mod $p$ cohomology vanishes.
+The spectral sequence shows $X'\to X$ is a mod $p$ cohomology equivalence, and $\pi$ has trivial $p$-completion; hence $X\to X'\to(X')^\wedge_p$ is an equivalence and $X'\simeq X\times K(\pi,1)$, so the action is homotopically trivial on $X$.
+For the real Grassmannians and $q=2$ the form $\sum x_i^2$ reduces badly, since in characteristic $2$ it is the square of a linear form; for even dimensions the split form $x_1x_2+\cdots+x_{2k-1}x_{2k}$ defines a conjugate subgroup that reduces well, and $BSO_{2n+1}$ at odd $p$ is reached through $BU_{2n+1}$.
+\end{proof}
+
+The proof contains a homotopy theoretical principle: if a map $f\colon X\to X$ belongs to an action of a group $\pi$ with trivial mod $p$ cohomology that acts trivially on $H^*(X;\F_p)$, then $f$ is homotopic to the identity on the $p$-adic completion of $X$.
+Whether the different Frobenius operations commute on the finite Grassmannians, that is, whether the group they generate is $\Zhat_p\units$ or a larger quotient of a free product, depends on the field extensions required to define enough \'etale covers.
+The simplest non-commutative Galois group that might intervene is that of $\Q(\mu_p,p^{1/p})$, an extension of $\F_p\units$ by $\F_p$.
+
+\subsection{Real varieties and homotopy fixed points}
+Let $V$ be a variety defined over $\R$, $V(\C)$ its complex points, $c$ complex conjugation, and $V(\R)$ the fixed points.
+For a finite dimensional involution $(X,t)$ we have the free model $X'=X\times S^\infty$ with diagonal involution, the Borel construction $X_{hZ/2}=X'/(\Z/2)$, and the fibration $X\to X_{h\Z/2}\to\RP^\infty$.
+The \emph{homotopy fixed points} are
+\[
+X^{h\Z/2}=\Map_{\Z/2}(S^\infty,X)\simeq\{\text{sections of }X_{h\Z/2}\to\RP^\infty\}.
+\]
+They satisfy $(S^\infty)^{h\Z/2}\simeq\mathrm{pt}$ and $(X\times X,\mathrm{flip})^{h\Z/2}\simeq X$, and there is a natural map $X^{\Z/2}\to X^{h\Z/2}$.
+The localized equivariant cohomology, by Smith theory and the localization theorem of Borel, satisfies
+\[
+H^*(X^{\Z/2};\F_2)\otimes\F_2[x,x^{-1}]\cong H^*(X_{h\Z/2};\F_2)[x^{-1}],
+\]
+and by Atiyah and Segal~\cite{AtiyahSegal} the completion of $K_{\Z/2}(X)$ at the ideal $(x-1,x+1)$, that is at $2$, is $K(X^{\Z/2})\otimes\Zhat_2[x]/(x^2-1)\cong K(X_{h\Z/2})^\wedge_2$.
+Odd primary information on the fixed points is not determined by the equivariant homotopy type, as involutions on spheres show, so one can only hope to recover the $2$-adic homotopy type.
+
+\begin{conjecture*}[Sullivan's fixed point conjecture]
+For a triangulable involution $(X,t)$ on a locally compact finite dimensional space, $(X^{\Z/2})^\wedge_2\simeq((X')^{h\Z/2})^\wedge_2$.
+\end{conjecture*}
+
+For the trivial involution the conjecture says that the space of pointed maps $\RP^\infty\to X$ is contractible for finite dimensional $X$; for a smooth involution, with $\nu$ the projectivized normal bundle of the fixed submanifold $F$,
+\[
+X_{h\Z/2}\simeq F\times\RP^\infty\cup_\nu(X-F)/(\Z/2),
+\]
+and the trivial case applied twice reduces the conjecture to it.
+For free involutions $X_{h\Z/2}$ is cohomologically finite dimensional and has no sections, in accordance with the conjecture.
+
+\begin{theorem}[Miller~\cite{Miller}]
+For a locally finite group $G$ and a finite dimensional CW complex $X$, the space of pointed maps $BG\to X$ is weakly contractible.
+\end{theorem}
+
+The conjecture for non-trivial actions of $p$-groups on finite complexes, in the form $(X^{G})^\wedge_p\simeq((X^\wedge_p)^{hG})$ with the appropriate care about components, was proved by Lannes~\cite{Lannes}, Carlsson~\cite{Carlsson} and Dwyer, Miller and Neisendorfer~\cite{DMN}.
+
+The \'etale homotopy type of $V$ over $\R$ is the Borel construction on the \'etale homotopy type of $V(\C)$ with its conjugation: the square $V(\C)\to V$, $\Spec\C\to\Spec\R$ realizes to the fibration $\widehat{V(\C)}\to V_{\mathrm{et}}\to\RP^\infty=(\Spec\R)_{\mathrm{et}}$, a result made precise by Cox~\cite{Cox}.
+A real point is a section $\Spec\R\to V$ of the structure map, and this suggests the three equivalent descriptions of the $2$-adic homotopy type of $V(\R)$: the $2$-completed homotopy fixed points of conjugation on $\widehat{V(\C)}$; the $2$-completed space of sections of $V_{\mathrm{et}}\to\RP^\infty$; and the union of the components of $\Map(\RP^\infty,V_{\mathrm{et}})$ lying over the non-trivial class in $[\RP^\infty,\RP^\infty]$.
+
+\begin{theorem}\label{thm:realetale}
+The fixed point conjecture implies that the three descriptions above give the $2$-adic homotopy type of $V(\R)$.
+\end{theorem}
+
+\begin{proof}
+Choose a linearly ordered system $\mathcal U_n$ of locally directed finite \'etale covers of $V(\C)$, each invariant under conjugation, with $\widehat{V(\C)}\simeq\lim\operatorname{nerve}\mathcal C(\mathcal U_n)$.
+Replace the categories of smallest neighbourhoods by the equivalent labelled categories $\mathcal C(\mathcal U,V)$, whose objects are pairs of a point and its smallest neighbourhood; this makes the maps between nerves under refinement canonical and equivariant.
+Choose inductively finite topological coverings $\mathcal V_n$ by contractible sets, invariant under conjugation and refining $\mathcal U_n$ and $\mathcal V_{n-1}$, and triangulate $V(\C)$ so that conjugation is piecewise linear and the complements are subcomplexes.
+Proposition~\ref{prop:lubkin} gives equivariant equivalences $V(\C)\to\operatorname{nerve}\mathcal C(\mathcal V_n,V)$ compatible with the maps to $\operatorname{nerve}\mathcal C(\mathcal U_n,V)$.
+Hence the profinite completion of $V(\C)_{h\Z/2}\to\RP^\infty$ is the limit of the completed Borel constructions of the nerves, which is $V_{\mathrm{et}}\to(\Spec\R)_{\mathrm{et}}$, and the $2$-completed spaces of sections agree.
+The fixed point conjecture identifies the first with the $2$-completion of $V(\R)$.
+\end{proof}
+
+By the theorems quoted above the conclusion of Theorem~\ref{thm:realetale} holds, interpreted componentwise.
+Two consequences are independent of the conjecture.
+
+\begin{corollary}
+Let $R=\F_2[x]=H^*(\RP^\infty;\F_2)$, acting on the mod $2$ \'etale cohomology of $V$ through $V\to\Spec\R$.
+Then $H^*(V(\R);\F_2)\otimes\F_2[x,x^{-1}]\cong H^*_{\mathrm{et}}(V;\F_2)\otimes_R\F_2[x,x^{-1}]$.
+With $\widehat R=\Zhat_2[x]/(x^2-1)$, $K(V(\R))\otimes\widehat R\cong K((V_{\mathrm{et}})^\wedge_2)$.
+\end{corollary}
+
+\begin{corollary}\label{cor:realpoints}
+A finite system of polynomial equations with real coefficients has a real solution if and only if the mod $2$ \'etale cohomology of the real variety $V$ it defines is non-zero in infinitely many degrees.
+\end{corollary}
+
+\begin{proof}
+If $V$ has a real point $\Spec\R\to V$, then $H^*((\Spec\R)_{\mathrm{et}};\F_2)=\F_2[x]$ is a retract of $H^*_{\mathrm{et}}(V;\F_2)$.
+If $V$ has no real point, conjugation is free on $V(\C)$, and $H^*_{\mathrm{et}}(V;\F_2)\cong H^*(V(\C)/(\Z/2);\F_2)$ vanishes above twice the complex dimension.
+\end{proof}
+
+The stable value of $H^i_{\mathrm{et}}(V;\F_2)$ for large $i$ is the direct sum of the mod $2$ cohomology of $V(\R)$, as the description of $X_{h\Z/2}$ above shows.
+The non-commutativity of complex conjugation with the rest of $\Gal(\Qbar/\Q)$, each conjugation commuting only with itself and the identity, means that this $2$-adic \'etale type has no Galois symmetry in general.
+
+
+% ═════════════════════════════════════════════════════════════════════════════
+\section{The Galois group in geometric topology}\label{sec:geometric}
+% ═════════════════════════════════════════════════════════════════════════════
+
+A compact manifold determines its homotopy type and its tangent bundle, and in the simply connected case of dimension at least five surgery theory says that the manifold is determined by this pair up to an equivalence that involves bundle isomorphisms and their deformation to fibre homotopy equivalences.
+Thus one has to understand bundles, bundle isomorphisms and fibre homotopy equivalences, and these are homotopy theoretical questions that can be arithmetized.
+At odd primes the piecewise linear and topological questions have a particularly regular structure, with four-fold periodicity and Galois symmetry in accord.
+
+\subsection{Block bundles and transversality}
+A $k$-simplex of the group $PL_n$ is a piecewise linear homeomorphism $f$ of $\sigma\times\R^n$, $\sigma$ the standard $k$-simplex, fixing $\sigma\times0$ and preserving $\tau\times\R^n$ for every face $\tau<\sigma$.
+These \emph{blocks of homeomorphisms} define the theory of $\R^n$-block bundles of Rourke and Sanderson~\cite{RourkeSanderson}: a total space $E$ decomposed into blocks $\sigma\times\R^n$, one for each simplex of the base $B$, which is embedded as the zero section.
+Isomorphisms are piecewise linear homeomorphisms of pairs, and the theory is classified by $BPL_n$.
+There is no geometric projection $E\to B$, only a homotopy theoretical one; the absence of the projection is what makes the tubular neighbourhood theorem true, since submanifolds have neighbourhoods that can be uniquely blocked.
+
+If $B$ is compact, a closed submanifold $M^{n+l}\subset E$ can be moved by a compactly supported isotopy so that it is transverse to $B$, meeting a neighbourhood of $B$ in a union of blocks; the intersection $V^l=M\cap B$ is a closed manifold, and a proper cobordism of $M$ intersects $B$ in a cobordism of $V$.
+Proper maps $M\to E$ are made transverse through their graphs.
+More general polyhedra may be intersected with $B$, and the intersection has the same singularities: a $\Z/m$-manifold, a polyhedron obtained from a manifold whose boundary consists of $m$ isomorphic pieces by identifying them, meets $B$ in a $\Z/m$-manifold.
+
+\begin{proposition}[Thom isomorphism]
+Intersection with the zero section gives isomorphisms $\Omega_*(E)\cong\Omega_{*-n}(B)$ and $\Omega_*(E;\Z/m)\cong\Omega_{*-n}(B;\Z/m)$, where $\Omega_*(E)$ denotes the bordism of proper maps; for oriented $E$ the same holds for oriented bordism.
+\end{proposition}
+
+\begin{proof}
+Surjectivity: the blocks over $V\to B$ form a manifold meeting $B$ in $V$.
+Injectivity: if $M\cap B=\partial W$, the union of $M\times I$ with the closed blocks over $W$ is a cobordism from $M$ to a manifold $M'$ disjoint from $B$, and since the one point compactification of $E$ minus $B$ is contractible, a proper map $M'\times\R\to E-B$ pushes $M'$ to infinity.
+\end{proof}
+
+\subsection{The signature invariant}
+For a closed oriented $4k$-manifold $V$ the signature $\sign V\in\Z$ is the signature of the intersection form on $H^{2k}(V;\Q)$.
+For a $\Z/m$-manifold $V$ the residue modulo $m$ of the signature of the manifold with boundary obtained by cutting along the singular set is a $\Z/m$-bordism invariant.
+This follows from Thom's bordism invariance of the signature and Novikov's additivity: if $V=\partial Q$ as a $\Z/m$-manifold, unfolding $Q$ along its singular stratum gives a manifold whose boundary is $V$ together with $m$ copies of a manifold $W$, and $0=\sign V+m\cdot\sign W$.
+Partial unfolding defines coefficient maps $\Omega_*(-;\Z/km)\leftrightarrows\Omega_*(-;\Z/m)$ and exact ladders, and we put
+\[
+\Omega_*(-;\Q/\Z)=\colim_m\Omega_*(-;\Z/m),\qquad\Omega_*(-;\Q)=\colim_k\bigl(\Omega_*\xrightarrow{k}\Omega_*\bigr),
+\]
+related by an exact sequence $\cdots\to\Omega_*\to\Omega_*(-;\Q)\xrightarrow{t}\Omega_*(-;\Q/\Z)\to\cdots$.
+
+\begin{definition}
+The \emph{signature invariant} of an oriented block bundle $E\to B$ is the pair of homomorphisms
+\[
+\sigma_\Q(E)\colon\Omega_*(E;\Q)\to\Q,\qquad\sigma_f(E)\colon\Omega_*(E;\Q/\Z)\to\Q/\Z,
+\]
+given by intersecting with the zero section and taking the signature; they are compatible with $t$ and with $\Q\to\Q/\Z$.
+\end{definition}
+
+The rational part carries the same information as the rational characteristic class $\mathcal L(E)=1+\mathcal L_1+\mathcal L_2+\cdots\in\prod_iH^{4i}(B;\Q)$ with $\langle\mathcal L(\tau_M)\mathcal L(E)|_V,[V]\rangle$ the signature of $V=M\cap B$; for vector bundles $\mathcal L(E)=L(E)^{-1}$ by Hirzebruch's signature theorem and Thom's construction of the rational Pontryagin classes.
+The finite part is a canonical integrality theorem for the rational classes.
+
+\begin{theorem}[Integrality]\label{thm:integrality}
+The rational class $\mathcal L(E)$ of an oriented block bundle satisfies two canonical integrality conditions.
+\begin{enumerate}[label=\textup{(\arabic*)}]
+\item At the prime $2$ there is a canonical class $\mathbb L_E\in\prod_iH^{4i}(B;\Z_{(2)})$ mapping to $\mathcal L(E)$, determined by $\mathcal L(E)$ and the $2$-primary part of $\sigma_f(E)$.
+\item At odd primes there is a canonical Thom class $\Delta_E\in\KO^n_c(E)\otimes\Z[1/2]$ with $\ph\Delta_E=\mathcal L(E)\cdot U_E$, determined by $\mathcal L(E)$ and the odd primary part of $\sigma_f(E)$.
+\end{enumerate}
+\end{theorem}
+
+Part (1) is the transversality characteristic class of Morgan and Sullivan~\cite{MS74}; we treat part (2), which rests on the following description of $K$-theory.
+
+\subsection{$K$-theory by geometric cocycles}\label{subsec:Delta}
+Let $\gamma_{4n}$ be the universal bundle over $BSO_{4n}$.
+The exterior algebra $\Lambda=\Lambda(\gamma_{4n})$ splits as $\Lambda^+\oplus\Lambda^-$, the $\pm1$ eigenspaces of the involution $\alpha|_{\Lambda^i}=(-1)^{i(i-1)/2+n}\ast$ given by Clifford multiplication with the volume form, $\ast$ the Hodge operator for any metric.
+Define
+\[
+\Delta_{4n}=\frac{\Lambda^+-\Lambda^-}{\Lambda^++\Lambda^-}\in\KO_c(\gamma_{4n})\otimes\Z[1/2]=\widetilde{\KO}(MSO_{4n})\otimes\Z[1/2].
+\]
+The class makes sense because $\Lambda^++\Lambda^-$ has dimension $2^{4n}$ and is invertible once $2$ is inverted, and $\Lambda^+\cong\Lambda^-$ as representations of $SO_{4n-1}$, so the numerator lies in the kernel of the restriction to $BSO_{4n-1}$, which is $\widetilde\KO(MSO_{4n})$.
+Restricted to a fibre $\Delta_{4n}$ is $2^{-2n}$ times the generator $\Delta^+-\Delta^-$ of $\widetilde\KO(S^{4n})$ given by the half spin representations, and $\Delta_{4q}\times\Delta_{4r}$ is the restriction of $\Delta_{4(q+r)}$ to $\gamma_{4q}\times\gamma_{4r}$.
+We use $\Delta_4$ to make $\KO\otimes\Z[1/2]$ four-periodic, $\KO(X)\cong\KO_c(X\times\R^4)$, $x\mapsto x\cdot\Delta_4$, and from now on write $K^*$ for this periodic theory.
+
+\begin{lemma}\label{lem:character}
+If $\Phi$ denotes the Thom isomorphism in rational cohomology, then $\Phi^{-1}\ph(\Delta_{4n})=\prod_j\tanh(x_j)/x_j$, where $\pm x_j$ are the Chern roots of $\gamma_{4n}\otimes\C$.
+Hence, for a closed oriented manifold $V^{4k}$ mapped to a point, the image of $V$ under the transformation defined by $\Delta$ is $\langle L(\tau_V),[V]\rangle=\sign V$.
+\end{lemma}
+
+\begin{proof}
+By the splitting principle it suffices to treat an oriented plane bundle with Chern roots $\pm x$, for which $\Phi^{-1}\ch(\Lambda^+-\Lambda^-)/\ch(\Lambda^++\Lambda^-)=x^{-1}(e^x-e^{-x})/(e^x+e^{-x})$.
+The image of $V$ involves the stable normal bundle, and $\prod\tanh x_j/x_j$ is the inverse of the Hirzebruch $L$-genus; since $L$ is multiplicative, $\langle L(\nu_V)^{-1},[V]\rangle=\langle L(\tau_V),[V]\rangle$, which is the signature by Hirzebruch's theorem.
+\end{proof}
+
+The classes $\Delta_{4n}$ define a multiplicative transformation from oriented bordism to $K$-theory, the \emph{signature orientation}.
+Let $\Omega^{\mathrm{odd}}_*(X;\Q/\Z)=\colim_{m\text{ odd}}\Omega_*(X;\Z/m)$, smooth oriented $\Z/m$-manifolds in $X$.
+
+\begin{definition}
+A \emph{finite geometric cocycle} of degree $j$ on $X$ is a homomorphism $\lambda\colon\Omega^{\mathrm{odd}}_{4*+j}(X;\Q/\Z)\to\Q/\Z$ satisfying the \emph{periodicity relation}
+\[
+\lambda\bigl((V\to X)\times(M\to\mathrm{pt})\bigr)=\sign M\cdot\lambda(V\to X)
+\]
+for every closed oriented manifold $M$.
+A \emph{geometric cocycle over $\Q$} is a homomorphism $\Omega_{4*+j}(X;\Q)\to\Q$ with the same property.
+\end{definition}
+
+\begin{theorem}\label{thm:geomcocycles}
+Let $X$ be a finite complex.
+There are natural isomorphisms
+\begin{gather*}
+K^j(X)\otimes\Q\cong\{\text{geometric cocycles of degree }j\text{ over }\Q\},\\
+K^j(X)^\wedge\cong\{\text{finite geometric cocycles of degree }j\},
+\end{gather*}
+where $K^j(X)^\wedge$ is the completion of $\KO^j(X)$ with respect to groups of odd order.
+A pair of cocycles that are compatible, in the sense that the rational one takes integral values on the lattice $\Omega_*(X)\subseteq\Omega_*(X;\Q)$ and maps to the finite one under $t$, determines a unique element of $\KO^j(X)\otimes\Z[1/2]$.
+\end{theorem}
+
+\begin{proof}
+We work with all groups localized away from $2$.
+Evaluation against the signature orientation gives maps from $K$-theory to cocycles, the periodicity relation being Lemma~\ref{lem:character} together with multiplicativity.
+
+\emph{Step 1: the homology theories.}
+The transformation $\Delta_*\colon\Omega_*(X)\to K_*(X)$ factors through
+\[
+\Omega_*(X)\otimes_{\Omega_*}K_*(\mathrm{pt})\longrightarrow K_*(X),
+\]
+where $\Omega_*\to K_*(\mathrm{pt})=\Z[1/2][u^{\pm1}]$, $|u|=4$, sends $M^{4k}$ to $\sign(M)u^k$.
+This map is an isomorphism.
+The genus $MU_*\to\Omega_*\to K_*(\mathrm{pt})$ is the $L$-genus, whose formal group law $F(x,y)=(x+y)/(1+xy)$ becomes the multiplicative formal group law in the coordinate $2x/(1-x)$ over $\Z[1/2]$; it has height one at every odd prime.
+By Landweber's exact functor theorem $X\mapsto MU_*(X)\otimes_{MU_*}K_*(\mathrm{pt})$ is a homology theory, and since $\Omega_*(X)\otimes\Z[1/2]\cong MU_*(X)\otimes_{MU_*}\Omega_*\otimes\Z[1/2]$ it coincides with $\Omega_*(X)\otimes_{\Omega_*}K_*(\mathrm{pt})$.
+The natural map to $K_*(X)$ is a transformation of homology theories that is an isomorphism on a point, hence an isomorphism on finite complexes.
+Sullivan's original argument follows Conner and Floyd~\cite{ConnerFloyd}: obstruction theory in the universal spaces gives surjectivity, and a computation for the Thom spaces $MSO_N$ together with the natural splitting of the surjection gives injectivity.
+
+\emph{Step 2: mod $m$ coefficients and duality.}
+For $m$ odd the Moore spectrum $M(\Z/m)$ is a ring spectrum on which multiplication by $m$ is null.
+Geometrically, the product of two $\Z/m$-manifolds is a $\Z/m$-manifold except along the points whose link is $\Z/m\ast\Z/m$, a one-dimensional $\Z/m$-manifold that bounds, essentially uniquely, and replacing the cone on the link by the bounding manifold resolves the singularity.
+Hence $K_*(X;\Z/m)\cong\Omega_*(X;\Z/m)\otimes_{\Omega_*}K_*(\mathrm{pt})$ is a $\Z/m$-module with a natural pairing, and the evaluation
+\[
+K^*(X;\Z/m)\longrightarrow\Hom(K_*(X;\Z/m),\Z/m)=\Hom(K_*(X;\Z/m),\Q/\Z)
+\]
+is a natural transformation of cohomology theories, since $\Q/\Z$ is injective.
+On a point it is an isomorphism, by Bott periodicity, so it is an isomorphism for finite complexes: Pontryagin duality for $K$-theory with odd finite coefficients.
+At the prime $2$ both the duality and the description by bordism fail, since $\KO(-;\Z/2)$ is not multiplicative and $\KO$ is related to spin bordism instead.
+
+\emph{Step 3: passage to the limit.}
+Since $\KO^j(X)$ is finitely generated, $K^j(X)^\wedge=\lim_{m\text{ odd}}K^j(X;\Z/m)$, and
+\[
+K^j(X)^\wedge\cong\lim_m\Hom\bigl(\Omega_*(X;\Z/m)\otimes_{\Omega_*}K_*,\Q/\Z\bigr)\cong\Hom\bigl(\colim_m\Omega_*(X;\Z/m)\otimes_{\Omega_*}K_*,\Q/\Z\bigr),
+\]
+which is the subgroup of $\Hom(\Omega^{\mathrm{odd}}_*(X;\Q/\Z),\Q/\Z)$ of homomorphisms factoring through the tensor product, that is, satisfying the periodicity relation.
+The rational statement is a cohomology computation: for each rational cocycle $\sigma_\Q$ there is a unique $\Sigma\in K(X)\otimes\Q$ with $\sigma_\Q(f\colon M\to X)=\langle L(\tau_M)\ph(f^*\Sigma),[M]\rangle$.
+The final statement is the arithmetic square $0\to K(X)\to K(X)^\wedge\oplus K(X)\otimes\Q\to K(X)\otimes\Af\to0$ of Proposition~\ref{prop:arithsquare}.
+\end{proof}
+
+The evaluation of a class $\nu\in K^i(X)$ on a $\Z/m$-manifold can be made directly: embed $M$ equivariantly in $D^2_\ast\times\R^N$, where $\Z/m$ rotates the boundary of the disc, and pull back $\Delta$ to the mod $m$ Moore space $(D^2_\ast/(\Z/m)\partial)\times\R^N$, whose $K$-group is $\Z/m$.
+This gives an analytic interpretation of the residues through the signature operator.
+
+\begin{corollary}\label{cor:Korientation}
+The signature invariant of an oriented block bundle $E\to B$ over a finite complex, restricted to smooth $\Z/m$-manifolds in the Thom space $E^+$, $m$ odd, and to rational bordism, is a compatible pair of geometric cocycles of degree $n$.
+It defines the canonical Thom class $\Delta_E\in K^n_c(E)$ of Theorem~\ref{thm:integrality}, which for vector bundles is the class $\Delta_{n}$ pulled back from the universal bundle.
+\end{corollary}
+
+\begin{proof}
+Bordism invariance and the periodicity relation hold by construction, all values in degrees other than $4*+n$ vanish, and integrality on $\Omega_*(E)$ holds because closed manifolds have integral signatures.
+Theorem~\ref{thm:geomcocycles} gives $\Delta_E$.
+A point in a fibre meets $B$ transversally in one point, so $\Delta_E$ restricts to a generator on each fibre and is a Thom class.
+\end{proof}
+
+Atiyah has proposed a direct construction of $\Delta_E$: for a polyhedral submanifold $M\subset\R^N$ with normal block bundle $E$, the volume form $\gamma_x$ of the normal space at a non-singular point is an element of the Clifford algebra with $\gamma_x^2=1$, and $\Lambda\tau_x\otimes(\Lambda^+\nu_x-\Lambda^-\nu_x)$ is the local form of $\Delta_E$.
+The problem is to extend $\gamma$ over all of $M$, with $\gamma_y^2$ in a contractible neighbourhood of $1$, by connecting the local geometry of $M$ with the homotopy of regions in the Clifford algebra.
+
+\subsection{Rational and profinite piecewise linear theory}
+The theory of $n$-dimensional block bundles has a profinite completion $[X,(BPL_n)^\wedge]$, a compact Hausdorff space in which the actual bundles form a dense subset, and a rationalization $[X,(BPL_n)_{(0)}]$.
+By the arithmetic square, a bundle is a rational bundle and a profinite bundle with a coherence condition over the adeles.
+
+\begin{theorem}\label{thm:PLrational}
+The rational classes $\mathcal L_i\in H^{4i}(-;\Q)$ and the Euler class in $H^n(-;\Q)$, for $n$ even, or the Hopf class in $H^{2n-2}(-;\Q)$, for $n$ odd, form a complete set of rational invariants of oriented $PL_n$ bundles, and the rational oriented theory is the corresponding product of cohomology theories.
+\end{theorem}
+
+\begin{proof}
+For $n>2$ the map $G_n/PL_n\to G/PL$ is an equivalence, $G/PL$ has rational homotopy $\Q$ in degrees $4i$ detected by the $\mathcal L_i$, and $BSG_n$ is rationally $K(\Q,n)$ or $K(\Q,2n-2)$ by Proposition~\ref{prop:rationalspherical}.
+The fibration $G_n/PL_n\to BSPL_n\to BSG_n$ splits rationally, through the $\mathcal L$-classes and the Euler or Hopf class, because $BSG$ has finite homotopy groups.
+\end{proof}
+
+For vector bundles of dimension $2n$ the Euler class satisfies $e^2=p_n$, so that for instance $e^2=3\mathcal L_1$ in dimension two.
+For block bundles these relations fail, and one may ask whether they hold for piecewise linear microbundles, which have a geometric projection.
+
+\begin{theorem}\label{thm:PLprofinite}
+Let $n\ge3$.
+At odd primes, a profinite $PL_n$ bundle is determined by the completed fibre homotopy type of the complement of its zero section and by its $K$-theory Thom class, and every $\widehat K$-oriented $\widehat S^{n-1}$-fibration arises:
+\[
+\{\text{profinite }PL_n\text{ bundles}\}\cong\{\widehat K\text{-oriented }\widehat S^{n-1}\text{-fibrations}\}.
+\]
+\end{theorem}
+
+Thus at odd primes the geometric content of a piecewise linear bundle, beyond its homotopy theory, is carried by the signatures of $\Z/m$ intersections with the zero section, $m$ odd.
+Any assignment of signatures to virtual intersections with a spherical fibration, compatible with bordism and periodicity, is realized by a profinite $PL$ bundle in its fibre homotopy type, and the obstruction to realizing a completed spherical fibration as the complement of the zero section of a $PL$ bundle is the obstruction to $\widehat K$-orientability, a characteristic class $k_1(\xi)\in\widehat K^1(B)$.
+
+\begin{proof}
+For a multiplicative cohomology theory $h$ there is an orientation sequence
+\[
+\cdots\to hG_n\to SG_n\to B^\otimes\to BhG_n\to BSG_n,
+\]
+where $B^\otimes$ classifies the units $1+\widetilde h^0$ and $BhG_n$ classifies $h$-oriented fibrations; the existence of $BhG_n$ follows from Dold's theorem and the Mayer--Vietoris sequence of $h$.
+Compare it, for completed $K$-theory, with the sequence of $PL_n\subset G_n$:
+\[
+\begin{tikzcd}[column sep=small]
+SPL_n\arrow[r]\arrow[d] & SG_n\arrow[r]\arrow[d] & G_n/PL_n\arrow[r]\arrow[d,"p"] & BSPL_n\arrow[r]\arrow[d,"\Delta_{PL}"] & BSG_n\arrow[d]\\
+\widehat{KG}_n\arrow[r] & \widehat{SG}_n\arrow[r] & \widehat B^\otimes\arrow[r] & (BKG_n)^\wedge\arrow[r] & (BSG_n)^\wedge
+\end{tikzcd}
+\]
+where $\Delta_{PL}$ sends a bundle to its complement with the orientation $\Delta_E$, and $p$ is induced.
+The homotopy groups of $G_n/PL_n$, $n\ge3$, are $0,\Z/2,0,\Z$ with period four by the surgery theory of Kervaire, Milnor and Levine~\cite{KervaireMilnor}, the generator of $\pi_{4k}$ being represented by a block bundle $\gamma$ over $S^{4k}$ with a degree one map $\gamma\to\R^n$ transverse to $0$ whose preimage has signature $16$ for $k=1$ and $8$ for $k>1$.
+Unwinding the definition of $\Delta_E$ through transversality, $p$ sends this generator to a power of $2$ times a generator of $\pi_{4k}\widehat B^\otimes=\Zhat_{\mathrm{odd}}$, while all other groups vanish at odd primes.
+Hence $p$ is completion at odd primes, and the five lemma shows that $\Delta_{PL}$ is.
+\end{proof}
+
+\begin{corollary}[Sullivan]
+At odd primes $G/PL\simeq G/\mathrm{Top}\simeq BO^\otimes$, and $G/PL\simeq BO$ as spaces.
+At the prime $2$,
+\[
+G/\mathrm{Top}_{(2)}\simeq\prod_{i\ge1}K(\Z/2,4i-2)\times K(\Z_{(2)},4i),\qquad G/PL_{(2)}\simeq E\times\prod_{i\ge2}K(\Z/2,4i-2)\times K(\Z_{(2)},4i),
+\]
+where $E$ is the two-stage space with homotopy $\Z/2$ in degree $2$, $\Z_{(2)}$ in degree $4$ and $k$-invariant $\delta Sq^2\iota_2$.
+\end{corollary}
+
+The first statement uses the theorem of Kirby and Siebenmann that $\mathrm{Top}/PL\simeq K(\Z/2,3)$~\cite{KirbySiebenmann}, so that $PL$ and $\mathrm{Top}$ agree away from $2$.
+The equivalence between $BO^\otimes$ and $BO$ at odd primes holds even as infinite loop spaces, by Adams and Priddy~\cite{AdamsPriddy}.
+At the prime $2$ the geometric invariants of $G/PL$ are the Kervaire--Arf invariants in degrees $4i+2$ and the $2$-local signatures in degrees $4i$, and the class $\delta Sq^2\iota_2$ reflects the fact that a homeomorphism between simply connected piecewise linear manifolds of dimension at least five is homotopic to a piecewise linear homeomorphism provided an obstruction of order two in $H^4(M;\Z)$, the integral Bockstein of the Kirby--Siebenmann class in $H^3(M;\Z/2)$, vanishes.
+
+\subsection{Galois symmetry in piecewise linear theory}
+The abelianized Galois group $\Zhat\units$ acts on $\widehat K(X)$, the element $\mu_k$ acting as the invertible part of $\psi^k$.
+We extend the action to the periodic theory: on $\widehat K^n(X)$ with $n=4k$ put $\alpha(x)=\alpha^{-n/2}x^\alpha$ through the periodicity isomorphism $\widehat K^n\cong\widehat K^0$, and extend to other degrees by suspension.
+The factor $\alpha^{-n/2}$ makes the action commute with the periodicity isomorphism, because $\Delta_4^\alpha=\alpha^2\Delta_4$ on the Bott class of $\R^4$.
+
+The group $\Zhat\units\times\Zhat\units$ acts on profinite $PL_n$ bundles through the invariants of Theorem~\ref{thm:PLprofinite},
+\[
+(\alpha,\beta)\cdot\bigl(\Delta_E,\ (E-B)\to B\bigr)=\bigl(\beta\,\alpha(\Delta_E),\ (E-B)\to B\bigr),
+\]
+and $\Zhat\units$ acts on oriented $\widehat S^{n-1}$-fibrations by $(\xi,U)\mapsto(\xi,\alpha U)$.
+
+\begin{theorem}[Generalized Adams conjecture]\label{thm:genadams}
+Consider the natural maps of oriented profinite theories
+\[
+\{n\text{-dimensional vector bundles}\}\xrightarrow{t}\{PL_n\text{ bundles}\}\xrightarrow{h}\{\widehat S^{n-1}\text{-fibrations}\},
+\]
+with actions of $\Gal(\Qbar/\Q)$, $\Zhat\units\times\Zhat\units$ and $\Zhat\units$.
+For $\sigma\in\Gal(\Qbar/\Q)$ with $\chi(\sigma)=\alpha$,
+\[
+t(V^\sigma)=\begin{cases}\alpha^{n/2}\cdot\alpha\bigl(t(V)\bigr) & n\text{ even},\\ \alpha^{(n-1)/2}\cdot\alpha\bigl(t(V)\bigr) & n\text{ odd},\end{cases}\qquad h\bigl(\beta\cdot\alpha(E)\bigr)=\beta\cdot h(E).
+\]
+\end{theorem}
+
+\begin{proof}
+The second formula is immediate from the definitions.
+For the first, $\sigma$ acts on the cofibration $(BSO_{n-1})^\wedge\to(BSO_n)^\wedge\to\operatorname{Th}(\widehat\gamma_n)$, where $\widehat\gamma_n$ is the completed universal spherical fibration, hence on the Thom space; obstruction theory shows that the induced map on $\widehat K(\operatorname{Th}\widehat\gamma_n)$ is $x\mapsto\beta\cdot x^\alpha$ with $\beta=\alpha^{n/2}$ or $\alpha^{(n-1)/2}$, because both sides agree on cohomology, where the Euler class is multiplied by $\alpha^{n/2}$ and the Thom class of $\widehat\gamma_n$ accordingly.
+\end{proof}
+
+\begin{corollary}
+The action of $\Gal(\Qbar/\Q)$ on the topological type of vector bundles is abelian, and the diagonal action $E\mapsto\alpha^{n/2}\alpha(E)$, respectively $\alpha^{(n-1)/2}\alpha(E)$, on $PL_n$ bundles is algebraic: it preserves the image of the linear Grassmannian and restricts there to the Galois action.
+\end{corollary}
+
+Since we work at odd primes, a homeomorphism of bundles is a piecewise linear homeomorphism up to isotopy, and topological type means piecewise linear type.
+In the stable range the symmetries simplify: the Galois action on stable vector bundles becomes the action of $\Zhat\units$ on $\widehat K$, the action of $(\alpha,\beta)$ on stable $PL$ bundles reduces to $\alpha$, because the fibrewise completed join with $K(\Zhat,1)$ admits automorphisms multiplying orientations by any unit, and the action on stable spherical fibrations is trivial.
+
+\begin{theorem}\label{thm:stableequivariance}
+The sequence of stable profinite theories at odd primes
+\[
+\{\text{vector bundles}\}\to\{PL\text{ bundles}\}\to\{\text{spherical fibrations}\}
+\]
+is equivariant for $\Zhat\units$ acting on vector bundles through the Galois action on the Grassmannians, on $PL$ bundles through the action on the signature invariant $\Delta_E$, and trivially on spherical fibrations.
+In particular all the natural symmetry of stable profinite piecewise linear theory is Galois symmetry.
+\end{theorem}
+
+It would be interesting to compute the effect of the Galois group on the signature invariant itself, that is, $\sigma(\alpha(E))$ in terms of $\sigma(E)$.
+The theorem gives an explicit measure of the effect of the Galois group on the topological type of a vector bundle at odd primes, which might be useful for algebraic vector bundles in characteristic two.
+
+\subsection{Normal invariants and periodicity}
+Geometrically a normal invariant over a compact manifold $M$ is a bordism class of degree one maps $f\colon L\to M$ covered by a bundle map from the stable normal bundle of $L$ to some bundle over $M$; homotopy theoretically it is a fibre homotopy equivalence between bundles over $M$.
+Normal invariants form groups classified by $G/O$, $G/PL$ and $G/\mathrm{Top}$, and by the surgery theory of Browder and Novikov they parametrize the manifolds within a simply connected homotopy type~\cite{Browder,Novikov,Wall}.
+The signatures of transverse preimages of submanifolds and $\Z/m$-submanifolds, and the Arf invariants of the corresponding quadratic forms over $\Z/2$, form a complete set of numerical invariants of piecewise linear normal invariants~\cite{SulHaupt}, and of topological ones by Kirby and Siebenmann.
+The relations between them are bordism invariance and the periodicity formula, a perfect four-fold periodicity in the topological case even at $2$.
+At odd primes the invariants define, by Theorem~\ref{thm:geomcocycles}, the equivalence
+\[
+tN\cong plN\cong K^\otimes
+\]
+between normal invariants and the units of $K$-theory, the geometric periodicity becoming Bott periodicity.
+Hence $\Zhat\units$ acts on topological normal invariants.
+For each profinite vector bundle $v$ over $M$ and $\alpha\in\Zhat\units$, Theorem~\ref{thm:adamsconj} gives a canonical fibre homotopy equivalence $v^\alpha\simeq v$, determined by the isomorphism induced by $\alpha$ on $BO_{n-1}$, hence a canonical element $(v^\alpha\simeq v)$ of the profinite smooth normal invariants.
+
+\subsection{Eigenspace decomposition}
+Let $p$ be odd and $\zeta$ a generator of $\mu_{p-1}\subset\Zhat_p\units$.
+On a $\Zhat_p$-module $K$ with a continuous action of $\Zhat_p\units$, the element $\zeta$ acts by an automorphism $T$ with $T^{p-1}=1$, and the operators
+\[
+\pi_i=\prod_{j\ne i}\frac{T-\zeta^j}{\zeta^i-\zeta^j},\qquad i=0,\dots,p-2,
+\]
+are orthogonal idempotents, because the differences $\zeta^i-\zeta^j$ are units.
+They decompose $K=\bigoplus_iK_{\zeta^i}$ into eigenspaces, and we group them as $K=K_1\oplus K_\xi$, with $K_1$ the eigenspace of $1$ and $K_\xi$ the sum of the others; this splitting does not depend on the choice of $\zeta$.
+Doing this at each odd prime gives natural splittings
+\[
+K=K_1\oplus K_\xi,\qquad\Ktop=(\Ktop)_1\oplus(\Ktop)_\xi,\qquad tN=(tN)_1\oplus(tN)_\xi
+\]
+of profinite vector bundles, topological bundles and topological normal invariants.
+On $\widetilde K(S^{4i})$ the element $\zeta$ acts by $\zeta^{2i}$, so $\widetilde K(S^{4i})_p$ lies in $K_1$ if $(p-1)\mid 2i$ and in $K_\xi$ otherwise.
+
+Let $C^1\subseteq\Ktop$ be the subgroup of topological bundles whose Thom isomorphism $x\mapsto x\cdot\Delta_E$ is equivariant, that is, $\alpha(\Delta_E)=\Delta_E$ for all $\alpha$.
+Such bundles are fixed by the Galois action, and in particular $C^1\subseteq(\Ktop)_1$.
+Consider the diagram of theories
+\[
+\begin{tikzcd}[column sep=small]
+& K\arrow[rd,"\theta"] & \\
+tN\arrow[rr,"j"] & & \Ktop
+\end{tikzcd}
+\]
+where $\theta$ takes the underlying topological bundle and $j$ takes a fibre homotopy equivalence $E\simeq F$ to $E-F$.
+The image of $\theta$ consists of the smoothable bundles and the image of $j$ of the fibre homotopically trivial ones, and $\Zhat\units$ acts compatibly.
+
+\begin{theorem}[Decomposition]\label{thm:decomposition}
+At odd primes:
+\begin{enumerate}[label=\textup{(\arabic*)}]
+\item $\theta$ is injective on the $1$-component and $(\Ktop)_1=\theta(K_1)\oplus C^1$;
+\item $j$ is injective on the $\xi$-component and $(\Ktop)_\xi=j(tN_\xi)$;
+\item $(\operatorname{im}\theta)_\xi\subseteq(\operatorname{im}j)_\xi$: a vector bundle in the $\xi$-component is fibre homotopically trivial;
+\item $(\operatorname{im}j)_1\subseteq(\operatorname{im}\theta)_1$: a fibre homotopically trivial bundle in the $1$-component is smoothable.
+\end{enumerate}
+Thus $\Ktop\cong C^1\oplus K_1\oplus tN_\xi$, the subgroup $C^1$ of equivariant bundles being complementary to the subgroup of bundles that are smoothable or fibre homotopically trivial.
+\end{theorem}
+
+Since $\Ktop$, $tN_\xi$ and $K_1$ are representable, so is $C^1$, and $\pi_iC^1$ is the torsion of $\Ktop(S^i)$, which is the cokernel of the $J$-homomorphism in the stable $(i-1)$-stem, or equivalently the group of $(i-1)$-dimensional homotopy spheres modulo those bounding parallelizable manifolds.
+For example $(C^1)_p$ is $(2p(p-1)-2)$-connected.
+
+\begin{corollary}
+$C^1$ injects into homotopy theory and into topological theory modulo smooth theory.
+Distinct stable vector bundles fixed by all elements of finite order of $\Zhat\units$ are topologically distinct.
+\end{corollary}
+
+\subsection{The $\Theta$ cocycle}
+For a topological bundle $E$ over $B$ define $\Theta_E\colon\Zhat\units\to K^\otimes(B)=1+\widetilde K(B)$ by
+\[
+\Theta_E(\alpha)\cdot\Delta_E=\alpha(\Delta_E).
+\]
+The idea of the invariant goes back to Thom, and a related class for vector bundles was used by Adams and Bott.
+It has the following properties.
+\begin{enumerate}[label=(\alph*)]
+\item $\Theta_E$ is the product of its $p$-components $\Zhat_p\units\to K^\otimes(B)_p$.
+\item $\Theta_E$ is a crossed homomorphism: $\Theta_E(\alpha\beta)=\alpha(\Theta_E(\beta))\cdot\Theta_E(\alpha)$, because $\alpha$ is multiplicative.
+\item $\Theta_E$ is continuous, and $\Theta_{E\oplus F}=\Theta_E\Theta_F$.
+\item Replacing the orientation $\Delta_E$ by $u\Delta_E$, $u\in K^\otimes(B)$, multiplies $\Theta_E$ by the principal crossed homomorphism $\delta u(\alpha)=\alpha(u)/u$.
+\item For an oriented plane bundle $\eta$, regarded as a complex line bundle, and an integer $k$ prime to $p$,
+\[
+\Theta_k(\eta)=\frac1k\,\frac{\eta^k-\bar\eta^k}{\eta-\bar\eta}\cdot\frac{\eta+\bar\eta}{\eta^k+\bar\eta^k},
+\]
+which is invariant under conjugation and lies in real $K$-theory.
+\end{enumerate}
+Property (e) holds because the class $\Delta$ of a plane bundle is $U=(\eta-\bar\eta)/(\eta+\bar\eta)$, computed in the complex $K$-theory of $\CP^\infty$, with character $\tanh x$, and $k$ acts by $k^{-1}\psi^k$ on it.
+
+Let $Z^1_d(\Zhat\units;K^\otimes)$ be the group of continuous crossed homomorphisms that are products of their $p$-components, $\delta\colon K^\otimes\to Z^1_d$ the coboundary, and $H^1_d(\Zhat\units;K^\otimes)=Z^1_d/\delta K^\otimes$.
+Since each $\Zhat_p\units$, $p$ odd, is topologically cyclic, a diagonal crossed homomorphism is determined by its value at an element $\alpha$ whose $p$-components are topological generators for all $p$; in particular the single class $\Theta_\alpha(E)\in K^\otimes(B)$ determines the topological type of a vector bundle.
+
+\begin{lemma}[$K$-lemma]\label{lem:Klemma}
+Let $\alpha\in\Zhat\units$ have topologically generating $p$-components, and write $\theta_\alpha(x)=\Theta_\alpha(x)$ for $x\in K$.
+The square
+\[
+\begin{tikzcd}
+K\arrow[r,"\theta_\alpha"]\arrow[d,"x\mapsto\alpha(x)-x"'] & K^\otimes\arrow[d,"u\mapsto\alpha(u)/u"]\\
+K\arrow[r,"\theta_\alpha"] & K^\otimes
+\end{tikzcd}
+\]
+commutes, the horizontal maps are isomorphisms on the $1$-components, and the vertical maps are isomorphisms on the $\xi$-components.
+\end{lemma}
+
+\begin{proof}
+A natural transformation $K\to K^\otimes$, that is, an $H$-map $\Z\times BO\to1\times BO$ at odd primes, is determined by its effect on the spheres $S^{4i}$, which carry the primitive rational homology; this follows from the claim in the proof of Theorem~\ref{thm:galoisK}, or by obstruction theory at odd primes.
+Let $\nu$ generate $\widetilde K(S^{4i})$.
+Then $\alpha(\nu)=\alpha^{2i}\nu$, as the computation of the Galois action on $H^{4i}$ shows, and $\alpha(1+\nu)=1+\alpha^{2i}\nu$.
+If $\theta_\alpha(\nu)=1+t_i\nu$, then, since $\nu^2=0$, both composites send $\nu$ to $1+t_i(\alpha^{2i}-1)\nu$, which proves commutativity.
+
+The vertical maps act on $\widetilde K(S^{4i})_p$ by $\alpha^{2i}-1$, which is a unit exactly when $(p-1)\nmid2i$, since $\alpha$ is a topological generator.
+These are the dimensions of the $\xi$-component, and since the vertical maps are maps of theories that are isomorphisms on spheres in these dimensions, they are isomorphisms on the $\xi$-components.
+
+For the horizontal maps, compare with Adams's operation $\rho^k(\eta)=k^{-1}(\eta^k-1)/(\eta-1)$ on line bundles.
+Using $\bar\eta=\eta^{-1}$, property~(e) becomes
+\[
+\theta_k(\eta)=\frac1k\,\frac{\eta^{2k}-1}{\eta^2-1}\cdot\frac{\eta^2+1}{\eta^{2k}+1}=\rho^k(\eta^2)^2\cdot\rho^k(\eta^4)^{-1},
+\]
+and since both sides are exponential and agree on line bundles, $\theta_\alpha(x)=\rho^\alpha(\psi^2x)^2\rho^\alpha(\psi^4x)^{-1}$ for all $x$.
+By Adams~\cite{AdamsJ2}, $\rho^\alpha(\nu)=1+r_i\nu$ on $S^{4i}$ with $r_i$ equal, up to a power of $2$ and a sign, to $(\alpha^{2i}-1)B_{2i}/4i$, where $B_{2i}$ is the Bernoulli number.
+Hence
+\[
+\theta_\alpha(\nu)=(1+2^{2i}r_i\nu)^2(1-4^{2i}r_i\nu)=1+2^{2i+1}\bigl(1-2^{2i-1}\bigr)r_i\nu .
+\]
+Let $(p-1)\mid2i$.
+By von Staudt and Clausen $v_p(B_{2i})=-1$; since $\alpha^{p-1}=1+pw$ with $w$ a unit, $v_p(\alpha^{2i}-1)=1+v_p(i)$; and $v_p(4i)=v_p(i)$.
+Thus $r_i$ is a $p$-adic unit.
+Moreover $2^{2i}\equiv1\pmod p$, so $1-2^{2i-1}\equiv1-2^{-1}=2^{-1}\pmod p$ is a unit as well.
+Therefore $\theta_\alpha$ is an isomorphism on spheres in the dimensions of the $1$-component, hence on the $1$-components.
+\end{proof}
+
+The same formula on the $\xi$-component shows where $\theta_\alpha$ fails to be an isomorphism: when $(p-1)\nmid2i$, the factor $\alpha^{2i}-1$ is a unit and $r_i$ is divisible by $p$ exactly when $p$ divides the numerator of $B_{2i}/i$, while $1-2^{2i-1}\equiv0\pmod p$ exactly when the order of $2$ in $\F_p\units$ divides the odd number $2i-1$.
+Sullivan observes from this computation and Adams's that the primes at which the smooth theory is not a direct summand of the topological theory are the irregular primes $37,59,67,101,\dots$, together with the primes for which $2$ has odd order in $\F_p\units$, namely the primes $8k-1$ and some primes $8k+1$ such as $73$ and $89$; each of these sets is infinite.
+
+\subsection{Topological and fibre homotopy types}
+
+\begin{theorem}\label{thm:Theta}
+At odd primes:
+\begin{enumerate}[label=\textup{(\arabic*)}]
+\item a vector bundle $E$ is topologically trivial if and only if $\Theta_E=1$;
+\item a vector bundle $E$ is fibre homotopically trivial if and only if $\Theta_E$ is principal, and every class in $H^1_d(\Zhat\units;K^\otimes)$ is the class of $\Theta_E$ for some vector bundle $E$;
+\item every element of $Z^1_d(\Zhat\units;K^\otimes)$ is $\Theta_E$ for some topological bundle $E$.
+\end{enumerate}
+Consequently, with $J_O$ and $J_{\mathrm{Top}}$ the images of the passage to stable fibre homotopy type,
+\[
+J_O\cong H^1_d(\Zhat\units;K^\otimes),\qquad J_{\mathrm{Top}}\cong C^1\oplus H^1_d(\Zhat\units;K^\otimes),\qquad\Ktop\cong C^1\oplus Z^1_d(\Zhat\units;K^\otimes),
+\]
+canonically.
+\end{theorem}
+
+In the coordinates $\Ktop\cong K_1\oplus K^\otimes_\xi\oplus C^1$, a vector bundle $V$ has components $(V_1,\delta^{-1}(\Theta_V)_\xi,0)$, and a topological normal invariant $u\in K^\otimes$ has components $(\theta^{-1}(\delta u)_1,u_\xi,0)$.
+The statement $J_O\cong H^1_d$ holds also at the prime $2$.
+It is striking that the problem, classifying a vector bundle up to linear isomorphism, homeomorphism and fibre homotopy equivalence, and the form of the solution, the cocycle $\Theta_E$ of the Galois action on the analytically defined class $\Delta_E$ and its cohomology class, match so closely.
+The class $\Delta_E$ is computed by the Hodge complex of a Riemannian metric on $E$, and the geometric cocycle it defines by signatures of transverse intersections.
+
+Let $\mathcal K$ be the fibre product of $\theta\colon K\to Z^1_d$ and $\delta\colon K^\otimes\to Z^1_d$,
+\[
+\mathcal K=\{(V,u)\in K\times K^\otimes:\Theta_V=\delta u\},
+\]
+the pairs of a vector bundle and a trivialization of its $\Theta$ invariant.
+The periodicity $tN\cong K^\otimes$, the identity of $K$, and $\Theta\colon\Ktop\to Z^1_d$ map the geometric square formed by smooth normal invariants $sN$, topological normal invariants, smooth bundles and topological bundles into the square formed by $\mathcal K$, $K^\otimes$, $K$ and $Z^1_d$.
+
+\begin{theorem}\label{thm:sN}
+The homomorphism $sN\to\mathcal K$ is surjective: every deformation of the $\Theta$ invariant of a vector bundle to $1$ is realized by a fibre homotopy trivialization.
+Moreover $\mathcal K\cong K_\xi\oplus K^\otimes_1$, so that $sN$ splits as a theory.
+\end{theorem}
+
+The splitting of $sN$ need not be additive, and the obstructions to an additive splitting are plausibly non-zero and central.
+
+\begin{proof}[Proof of Theorems~\ref{thm:decomposition}, \ref{thm:Theta} and~\ref{thm:sN}]
+The canonical elements $g(x)=(x^\alpha\simeq x)$ of $sN$ define a map $K\to sN$ whose composite with $sN\to\mathcal K\to K$ is $x\mapsto\alpha(x)-x$ and whose composite with $\mathcal K\to K^\otimes$ is $x\mapsto\theta_\alpha(x)$.
+By the $K$-lemma the induced maps $K_\xi\to\mathcal K\to K_\xi$ and $K_1\to\mathcal K\to K^\otimes_1$ are isomorphisms on homotopy groups in any range of dimensions.
+Hence $sN\to\mathcal K$ is onto and $\mathcal K\cong K_\xi\oplus K^\otimes_1$, up to any large dimension and then, by the theory of compact representable functors, with an actual section.
+
+Consider the map of squares
+\[
+(sN,\ K,\ tN,\ \Ktop)\longrightarrow(\mathcal K,\ K,\ K^\otimes,\ Z^1_d).
+\]
+The map $sN\to\mathcal K$ is onto, $tN\to K^\otimes$ is the periodicity isomorphism, $K\to K$ is the identity, and $\Ktop\to Z^1_d$ is $\Theta$, with kernel $C^1$ by definition.
+On $1$-components the map $\theta_\Delta\colon K\to Z^1_d$ is $x\mapsto\theta_\alpha(x)$, an isomorphism by the $K$-lemma, and on $\xi$-components $\delta$ is an isomorphism.
+The naturality of the eigenspace decomposition under $\theta$ and $j$ then gives Theorem~\ref{thm:decomposition} formally, together with $\theta(K_1)\oplus j(tN_\xi)\cong Z^1_d$, that is, $\Ktop\cong C^1\oplus Z^1_d$, under which $tN\to\Ktop$ and $K\to\Ktop$ become $0+\delta$ and $0+\theta_\Delta$.
+This proves Theorem~\ref{thm:Theta}(1) and (3).
+Part (2) follows from the definition of $\Theta$ and the surjectivity of $sN\to\mathcal K$, and every class of $H^1_d$ comes from a vector bundle because $H^1_d$ is concentrated in the $1$-component, $\delta$ being an isomorphism on the $\xi$-component, while $\theta_\Delta$ maps $K_1$ onto the $1$-component of $Z^1_d$.
+\end{proof}
+
+\begin{theorem}\label{thm:Jkernel}
+At odd primes, the kernels of the stable $J$-homomorphisms from profinite vector bundles, or from profinite topological bundles, to profinite spherical fibrations are the subgroups generated by the differences $x-\alpha(x)$, $\alpha\in\Zhat\units$.
+\end{theorem}
+
+\begin{proof}
+Conjugate elements are fibre homotopy equivalent, by Theorem~\ref{thm:adamsconj} for vector bundles and by the definition of the action on $PL$ bundles in general.
+Conversely let $V$ be a fibre homotopically trivial vector bundle.
+By Theorem~\ref{thm:Theta}, $\Theta_V(\alpha)=\alpha(u)/u$ for some $u$; by the $K$-lemma the $1$-component of $V$ is then of the form $\alpha(x)-x$, and on the $\xi$-component every element is a difference $\alpha(x)-x$, since $x\mapsto\alpha(x)-x$ is an isomorphism there.
+For topological bundles, the Galois action on $(\Ktop)_\xi$ is isomorphic to that on $K^\otimes_\xi$ by Theorem~\ref{thm:decomposition} and periodicity, so every element of $(\Ktop)_\xi$ is a difference of conjugates; on the $1$-component every bundle is smoothable up to $C^1$, which does not meet the kernel of $J$, and we are reduced to the case of vector bundles.
+\end{proof}
+
+For vector bundles Adams essentially proved this theorem by a $K$-theory computation once the Adams conjecture is known~\cite{AdamsJ2}; for piecewise linear and topological bundles the point is the compatibility of the Galois actions, which reduces the question to the linear case.
+
+
+% ═════════════════════════════════════════════════════════════════════════════
+\section{Formal manifold categories}\label{sec:formal}
+% ═════════════════════════════════════════════════════════════════════════════
+
+Let $\mathcal M$ be the category of compact simply connected manifolds and homeomorphisms.
+Browder's description of a manifold by its underlying Poincar\'e duality space, a Euclidean bundle over it and a degree one map from a sphere to the Thom space, can be tensored with a ring $R$ for which homotopy theory has a localization or completion $Y\mapsto Y_R$ and maps to $B_R$ have associated spherical fibrations: the subrings of $\Q$, the rings $\Zhat_p$, $\Zhat$, $\Q_p$ and $\Af$.
+This gives formal manifold categories $\mathcal M_R$, whose objects are CW complexes with homotopy groups $R$-modules and extra manifold structure~\cite{SulICM}.
+The decomposition of Theorem~\ref{thm:arithmeticsquare} and Browder's surgery theorem give
+\[
+\mathcal M\simeq\mathcal M_\Q\times_{\mathcal M_{\mathbb A}}\widehat{\mathcal M},\qquad\widehat{\mathcal M}=\mathcal M_{\Zhat}\simeq\prod_p\widehat{\mathcal M}_p .
+\]
+The formal categories are larger than $\mathcal M$ and admit more examples, manifolds with singularities and algebraic objects, and they carry a symmetry not visible in $\mathcal M$.
+
+\subsection{The rational category}
+A rational manifold of dimension $n$ is a rational homotopy type satisfying Poincar\'e duality over $\Q$, together with a class
+\[
+l_X=l_n+l_{n-4}+\cdots\in H_{n-4*}(X;\Q),
+\]
+where $l_n$ is the orientation and $l_0$ the signature when $n\equiv0\pmod 4$.
+To determine homeomorphisms up to concordance one represents $l_X$ by chains: a homeomorphism is a homotopy equivalence $f\colon X\to Y$ with a chain $\omega_f$ such that $f_\#l_X-l_Y=\partial\omega_f$.
+The adelic category is described in the same way over $\Af$, or over any field of characteristic zero.
+
+\subsection{The $p$-adic categories at odd primes}
+Let $(k_*,k^*)$ be the homology and cohomology theory obtained from the $p$-adic completion of connective real $K$-theory by turning the skeletal filtration into a grading.
+A \emph{$p$-adic manifold}, $p$ odd, is a \emph{$k$-duality space}: a CW complex $X$ with $p$-adic homotopy groups and a class $\mu_X\in k_m(X)$, $m=\dim X$, such that cap product with $\mu_X$ gives Poincar\'e duality $k^i(X)\cong k_{m-i}(X)$.
+A homeomorphism is a homotopy equivalence $f$ with $f_*\mu_X=\mu_Y$, made precise up to concordance with cycles and a homology between $f_*\mu_X$ and $\mu_Y$.
+The group of units $K(X)^\otimes$ of $k^0(X)$ acts simply transitively on the orientations of $X$, so the set of manifold structures on the homotopy type of $X$ is parametrized by this group of units.
+A homotopy type supports a $p$-adic manifold structure exactly when it has a $k$-duality.
+The Pontryagin character of $\mu_X$ is compatible with the rational class of a classical manifold, and $k_*$ has a cycle description by manifolds with signature free singularities~\cite{SulPeriodicity,Siegel}.
+
+\subsection{The $2$-adic category}
+At the prime $2$ a $2$-adic manifold has an underlying homotopy type satisfying Poincar\'e duality over $\Zhat_2$, with Wu classes $v=v_1+v_2+\cdots$ defined by $v_i\cup x=Sq^ix$ for $\dim x+i=\dim X$.
+The square $v^2=v_2^2+v_4^2+\cdots$ has terms only in degrees divisible by $4$, and the manifold structure provides a lift of it to
+\[
+L_X=l_1+l_2+\cdots\in H^{4*}(X;\Zhat_2).
+\]
+The manifold structures on a homotopy type are acted on simply transitively by the group $G(X)$ of inhomogeneous classes $u=u_2+u_4+\cdots$, with $\Z/2$ coefficients in degrees $4i+2$ and $\Zhat_2$ coefficients in degrees $4i$, under the law
+\[
+u\circ v=u+v+8uv.
+\]
+It is the product of the $\F_2$-vector spaces $H^{4i+2}(X;\F_2)$ and the subgroup $G_8(X)$ of classes in $H^{4*}(X;\Zhat_2)$, and $u\in G_8(X)$ changes the characteristic class by $L_{X^u}=L_X+8u(1+L_X)$.
+In particular $L_X$ modulo $8$ is a homotopy invariant.
+
+\subsection{Local categories and examples}
+For a set of primes $\ell$, $\mathcal M_{(\ell)}=\mathcal M_\Q\times_{\mathcal M_{\mathbb A}}\prod_{p\in\ell}\widehat{\mathcal M}_p$.
+Its objects satisfy duality over $\Zl$ with the extra structure at each $p\in\ell$ and over $\Q$.
+In particular $\mathcal M\simeq\mathcal M_{(2)}\times_{\mathcal M_\Q}\mathcal M_{(\mathrm{odd})}$: a manifold is a homological duality space over $\Z_{(2)}$ with homological invariants at $2$, a duality space over $\Z[1/2]$ with a $\KO\otimes\Z[1/2]$-orientation, and a coherence over $\Q$.
+
+Two sources of examples deserve mention.
+A polyhedron $V$ with the local homology of a manifold over $R$ satisfies duality over $R$; for $R=\Q$ Thom's transversality construction gives the rational characteristic class, which satisfies a canonical integrality condition~\cite{MS74}, and at odd primes it lifts to a canonical $k$-homology class.
+Thus, if $V$ also satisfies $\Z/p$-duality for all odd $p$, it is a local manifold at odd primes.
+Such polyhedra arise as quotients $W/\pi$ of manifolds by orientation preserving actions of finite groups, which are $\Z/p$-homology manifolds for $p$ prime to $|\pi|$ and rational homology manifolds always.
+
+A non-singular variety $V$ over an algebraically closed field of characteristic $p$ has a complete \'etale homotopy type that is a $q$-adic duality space for every $q\ne p$.
+The \'etale realization of the projective bundle of the tangent bundle gives a complex $K$-duality, once a generator of $H^1(k-0;\Zhat_q)\cong\Zhat_q$ is chosen, and the Galois action transforms it into the signature duality in real $K$-theory for $q>2$.
+If $\pi_1V=0$ we obtain a $q$-adic manifold $[V]\in\widehat{\mathcal M}_q$ for $q\ne2,p$.
+If $V$ is the reduction of a variety in characteristic zero and the generator corresponds to the natural generator of $H^1(\C-0;\Zhat_q)$, then $[V]\simeq[V_\C]$ in $\widehat{\mathcal M}_q$.
+
+\subsection{The Galois symmetry}
+For $p>2$ the units $\Zhat_p\units$ act on $\widehat{\mathcal M}_p$: a manifold $M$ given by $(X,\mu_X)$ goes to $(X,\alpha(\mu_X))$, an integer $q$ acting through $\psi^q$.
+For $p=2$, given $\alpha\in\Zhat_2\units$ define $u_\alpha\in G_8(M)$ by
+\[
+1+8u_\alpha=\frac{1+\alpha^2l_1+\alpha^4l_2+\cdots}{1+l_1+l_2+\cdots},\qquad u_\alpha=\frac{\alpha^2-1}8\,l_1+\Bigl(\frac{\alpha^4-1}8\,l_2+\frac{1-\alpha^2}8\,l_1^2\Bigr)+\cdots,
+\]
+and let $M^\alpha$ be the result of acting by $u_\alpha$ on the manifold structure; a computation shows that this is an action of $\Zhat_2\units$ on isomorphism classes.
+In both cases the underlying homotopy type is fixed.
+
+\begin{theorem}[Sullivan]
+The profinite manifold category $\widehat{\mathcal M}$ carries an action of $\Zhat\units=\Gal(\Q^{\mathrm{cyc}}/\Q)$, the symmetry of the field generated by the roots of unity.
+It is compatible with the Galois action on simply connected complex varieties defined over number fields at odd primes, and at $2$ up to elements of order $8$ in the cohomology rings.
+\end{theorem}
+
+The connection between the Galois action on manifolds and on their homotopy types is what proves the Adams conjecture for vector bundles, its extension to topological bundles of Section~\ref{sec:geometric}, and its analogue in manifold theory.
+The calculation at the prime $2$ can be deduced from the work of Wood on algebraic hypersurfaces and complete intersections~\cite{Wood1,Wood2}.
+
+% ═════════════════════════════════════════════════════════════════════════════
+\section{Later developments and open problems}\label{sec:further}
+% ═════════════════════════════════════════════════════════════════════════════
+
+\subsection{Localization and completion}
+Bousfield and Kan~\cite{BousfieldKan} constructed the $R$-completion of an arbitrary space as the homotopy limit of a cosimplicial resolution, and showed that for nilpotent spaces of finite type the $\F_p$-completion agrees with the $p$-adic completion of Section~\ref{sec:completion}.
+Hilton, Mislin and Roitberg~\cite{HMR} extended localization and the fracture square to nilpotent spaces, and Bousfield~\cite{BousfieldLoc} constructed the localization of every space with respect to every homology theory, which removes the asymmetry noted after Proposition~\ref{prop:locfib} at the expense of exactness.
+Sullivan's own continuation of the program on the rational side is the theory of minimal models of rational homotopy types by differential forms~\cite{SulInfinitesimal}: the arithmetic square suggests that profinite information is algebraic and rational information analytic, and the minimal model realizes the second half of this suggestion.
+It also gives the conjectured arithmeticity of the group of self-equivalences of a finite simply connected complex and its algebraic action on rational cohomology~\cite{SulInfinitesimal,Wilkerson}.
+
+\subsection{The Adams conjecture and the fixed point conjecture}
+The Adams conjecture was proved by Quillen~\cite{QuillenAdams}, by Sullivan~\cite{SulGenetics} along the lines of Section~\ref{sec:etale}, and by Becker and Gottlieb~\cite{BeckerGottlieb}.
+The fixed point conjecture, in the form of the contractibility of $\Map_*(BG,X)$ for $G$ locally finite and $X$ finite dimensional, is Miller's theorem~\cite{Miller}; its equivariant forms are due to Lannes~\cite{Lannes}, Carlsson~\cite{Carlsson} and Dwyer, Miller and Neisendorfer~\cite{DMN}, and Lannes's functor $T$ became a basic tool of unstable homotopy theory.
+The $p$-adic loop spaces of Theorem~\ref{thm:loopspheres} and the groups $U(n,\lambda)$ are the first examples of $p$-compact groups, whose theory was founded by Dwyer and Wilkerson~\cite{DwyerWilkerson}.
+
+\subsection{Manifolds}
+The $2$-primary invariant of block bundles is the transversality characteristic class of Morgan and Sullivan~\cite{MS74}.
+Ranicki~\cite{Ranicki} constructed the integral algebraic $L$-theory orientation of topological block bundles and manifolds, which combines the $\KO\otimes\Z[1/2]$-orientation of Section~\ref{sec:geometric} with the $2$-local information, and described a simply connected topological manifold of dimension at least five by a homotopy type with Poincar\'e duality in a local sense at the level of integral chains.
+Mandell~\cite{Mandell} showed that a simply connected homotopy type of finite type is determined by its integral cochains with their $E_\infty$ structure.
+This suggests the following problems, raised by Sullivan.
+
+\begin{problem}
+Construct an algebraic model of a simply connected closed topological manifold as an integral chain complex with a hierarchy of chain homotopies expressing an infinitely homotopy associative and graded commutative Poincar\'e duality algebra, combining the theories of Mandell and Ranicki.
+\end{problem}
+
+\begin{conjecture*}
+Over $\Q$ the rational characteristic classes of a manifold are constructed from its rational homotopy model enriched with a suitable form of Poincar\'e duality at the cochain level.
+\end{conjecture*}
+
+\begin{problem}
+Analyze the action of $\Gal(\Qbar/\Q)$ on the set of smooth manifold structures on the profinite homotopy type of a non-singular variety defined over $\Q$, including the non-simply connected case and complex dimension two.
+\end{problem}
+
+The obstruction theory of Section~\ref{sec:geometric} and the formal manifold categories show that for a simply connected non-singular variety of complex dimension at least three, defined over a number field, the action of $\Gal(\Qbar/\Q)$ on the topological manifold structure of its profinite homotopy type factors through $\Zhat\units$.
+For elliptic curves the action on $H^1$ already contains deep arithmetic information, so the general case requires care.
+
+\begin{conjecture*}
+There is a concrete context with symmetry that synthesizes the $\Gal(\Qbar/\Q)$-symmetry of simply connected non-singular varieties over $\Q$ of complex dimension greater than two and the $\Zhat\units$-symmetry of simply connected topological manifolds of real dimension greater than four.
+\end{conjecture*}
+
+A candidate replaces a manifold by the inverse system of its finite branched covers.
+Every class in the cohomology of a manifold with finite coefficients is killed by passing to a finite branched cover, by transversality and the representation of Eilenberg--MacLane spaces as infinite symmetric products, so every smooth manifold has an analogue of the \'etale site.
+
+% ═════════════════════════════════════════════════════════════════════════════
+% Bibliography
+% ═════════════════════════════════════════════════════════════════════════════
+\begin{thebibliography}{99}
+\small
+
+\bibitem{AdamsHopf}
+J.~F. Adams, \emph{On the non-existence of elements of Hopf invariant one}, Ann. of Math. (2) \textbf{72} (1960), 20--104.
+
+\bibitem{AdamsJ1}
+J.~F. Adams, \emph{On the groups $J(X)$. I}, Topology \textbf{2} (1963), 181--195.
+
+\bibitem{AdamsJ2}
+J.~F. Adams, \emph{On the groups $J(X)$. II}, Topology \textbf{3} (1965), 137--171; \emph{III}, Topology \textbf{3} (1965), 193--222.
+
+\bibitem{AdamsPriddy}
+J.~F. Adams and S.~B. Priddy, \emph{Uniqueness of $BSO$}, Math. Proc. Cambridge Philos. Soc. \textbf{80} (1976), 475--509.
+
+\bibitem{ArtinMazur}
+M. Artin and B. Mazur, \emph{Etale homotopy}, Lecture Notes in Math. \textbf{100}, Springer, Berlin, 1969.
+
+\bibitem{AtiyahSegal}
+M.~F. Atiyah and G.~B. Segal, \emph{Equivariant $K$-theory and completion}, J. Differential Geom. \textbf{3} (1969), 1--18.
+
+\bibitem{BeckerGottlieb}
+J.~C. Becker and D.~H. Gottlieb, \emph{The transfer map and fiber bundles}, Topology \textbf{14} (1975), 1--12.
+
+\bibitem{BousfieldLoc}
+A.~K. Bousfield, \emph{The localization of spaces with respect to homology}, Topology \textbf{14} (1975), 133--150.
+
+\bibitem{BousfieldKan}
+A.~K. Bousfield and D.~M. Kan, \emph{Homotopy limits, completions and localizations}, Lecture Notes in Math. \textbf{304}, Springer, Berlin, 1972.
+
+\bibitem{Browder}
+W. Browder, \emph{Surgery on simply-connected manifolds}, Ergeb. Math. Grenzgeb. \textbf{65}, Springer, Berlin, 1972.
+
+\bibitem{Carlsson}
+G. Carlsson, \emph{Equivariant stable homotopy and Sullivan's conjecture}, Invent. Math. \textbf{103} (1991), 497--525.
+
+\bibitem{ClarkEwing}
+A. Clark and J. Ewing, \emph{The realization of polynomial algebras as cohomology rings}, Pacific J. Math. \textbf{50} (1974), 425--434.
+
+\bibitem{ConnerFloyd}
+P.~E. Conner and E.~E. Floyd, \emph{The relation of cobordism to $K$-theories}, Lecture Notes in Math. \textbf{28}, Springer, Berlin, 1966.
+
+\bibitem{Cox}
+D.~A. Cox, \emph{The \'etale homotopy type of varieties over $\mathbf R$}, Proc. Amer. Math. Soc. \textbf{76} (1979), 17--22.
+
+\bibitem{DeligneWeil}
+P. Deligne, \emph{La conjecture de Weil. I}, Publ. Math. Inst. Hautes \'Etudes Sci. \textbf{43} (1974), 273--307.
+
+\bibitem{Dold}
+A. Dold, \emph{Halbexakte Homotopiefunktoren}, Lecture Notes in Math. \textbf{12}, Springer, Berlin, 1966.
+
+\bibitem{DMN}
+W.~G. Dwyer, H.~R. Miller and J. Neisendorfer, \emph{Fibrewise completion and unstable Adams spectral sequences}, Israel J. Math. \textbf{66} (1989), 160--178.
+
+\bibitem{DwyerWilkerson}
+W.~G. Dwyer and C.~W. Wilkerson, \emph{Homotopy fixed-point methods for Lie groups and finite loop spaces}, Ann. of Math. (2) \textbf{139} (1994), 395--442.
+
+\bibitem{FederGitler}
+S. Feder and S. Gitler, \emph{Mappings of quaternionic projective spaces}, Bol. Soc. Mat. Mexicana (2) \textbf{18} (1973), 33--37.
+
+\bibitem{HMR}
+P. Hilton, G. Mislin and J. Roitberg, \emph{Localization of nilpotent groups and spaces}, North-Holland Math. Stud. \textbf{15}, North-Holland, Amsterdam, 1975.
+
+\bibitem{JMO}
+S. Jackowski, J. McClure and B. Oliver, \emph{Homotopy classification of self-maps of $BG$ via $G$-actions. I, II}, Ann. of Math. (2) \textbf{135} (1992), 183--226, 227--270.
+
+\bibitem{KervaireMilnor}
+M.~A. Kervaire and J.~W. Milnor, \emph{Groups of homotopy spheres. I}, Ann. of Math. (2) \textbf{77} (1963), 504--537.
+
+\bibitem{KirbySiebenmann}
+R.~C. Kirby and L.~C. Siebenmann, \emph{Foundational essays on topological manifolds, smoothings, and triangulations}, Ann. of Math. Stud. \textbf{88}, Princeton Univ. Press, Princeton, 1977.
+
+\bibitem{Lannes}
+J. Lannes, \emph{Sur les espaces fonctionnels dont la source est le classifiant d'un $p$-groupe ab\'elien \'el\'ementaire}, Publ. Math. Inst. Hautes \'Etudes Sci. \textbf{75} (1992), 135--244.
+
+\bibitem{Liulevicius}
+A. Liulevicius, \emph{The factorization of cyclic reduced powers by secondary cohomology operations}, Mem. Amer. Math. Soc. \textbf{42} (1962).
+
+\bibitem{Lubkin}
+S. Lubkin, \emph{On a conjecture of Andr\'e Weil}, Amer. J. Math. \textbf{89} (1967), 443--548.
+
+\bibitem{Mandell}
+M.~A. Mandell, \emph{Cochains and homotopy type}, Publ. Math. Inst. Hautes \'Etudes Sci. \textbf{103} (2006), 213--246.
+
+\bibitem{Miller}
+H. Miller, \emph{The Sullivan conjecture on maps from classifying spaces}, Ann. of Math. (2) \textbf{120} (1984), 39--87.
+
+\bibitem{MS74}
+J.~W. Morgan and D.~P. Sullivan, \emph{The transversality characteristic class and linking cycles in surgery theory}, Ann. of Math. (2) \textbf{99} (1974), 463--544.
+
+\bibitem{Novikov}
+S.~P. Novikov, \emph{Homotopically equivalent smooth manifolds. I}, Izv. Akad. Nauk SSSR Ser. Mat. \textbf{28} (1964), 365--474.
+
+\bibitem{QuillenRemarks}
+D.~G. Quillen, \emph{Some remarks on etale homotopy theory and a conjecture of Adams}, Topology \textbf{7} (1968), 111--116.
+
+\bibitem{QuillenAdams}
+D.~G. Quillen, \emph{The Adams conjecture}, Topology \textbf{10} (1971), 67--80.
+
+\bibitem{Ranicki}
+A.~A. Ranicki, \emph{Algebraic $L$-theory and topological manifolds}, Cambridge Tracts in Math. \textbf{102}, Cambridge Univ. Press, Cambridge, 1992.
+
+\bibitem{RourkeSanderson}
+C.~P. Rourke and B.~J. Sanderson, \emph{Block bundles. I}, Ann. of Math. (2) \textbf{87} (1968), 1--28.
+
+\bibitem{Siegel}
+P.~H. Siegel, \emph{Witt spaces: a geometric cycle theory for $KO$-homology at odd primes}, Amer. J. Math. \textbf{105} (1983), 1067--1105.
+
+\bibitem{Spivak}
+M. Spivak, \emph{Spaces satisfying Poincar\'e duality}, Topology \textbf{6} (1967), 77--101.
+
+\bibitem{Stasheff}
+J. Stasheff, \emph{A classification theorem for fibre spaces}, Topology \textbf{2} (1963), 239--246.
+
+\bibitem{SulMIT}
+D. Sullivan, \emph{Geometric topology: localization, periodicity and Galois symmetry. The 1970 MIT notes}, edited by A. Ranicki, $K$-Monographs in Mathematics \textbf{8}, Springer, Dordrecht, 2005.
+
+\bibitem{SulHaupt}
+D. Sullivan, \emph{Triangulating and smoothing homotopy equivalences and homeomorphisms. Geometric Topology Seminar Notes}, in: \emph{The Hauptvermutung book}, $K$-Monographs in Mathematics \textbf{1}, Kluwer, Dordrecht, 1996, 69--103.
+
+\bibitem{SulICM}
+D. Sullivan, \emph{Galois symmetry in manifold theory at the primes}, in: Actes du Congr\`es International des Math\'ematiciens (Nice, 1970), Tome 2, Gauthier-Villars, Paris, 1971, 169--175.
+
+\bibitem{SulPeriodicity}
+D. Sullivan, \emph{Geometric periodicity and the invariants of manifolds}, in: Manifolds--Amsterdam 1970, Lecture Notes in Math. \textbf{197}, Springer, Berlin, 1971, 44--75.
+
+\bibitem{SulGenetics}
+D. Sullivan, \emph{Genetics of homotopy theory and the Adams conjecture}, Ann. of Math. (2) \textbf{100} (1974), 1--79.
+
+\bibitem{SulInfinitesimal}
+D. Sullivan, \emph{Infinitesimal computations in topology}, Publ. Math. Inst. Hautes \'Etudes Sci. \textbf{47} (1977), 269--331.
+
+\bibitem{Wall}
+C.~T.~C. Wall, \emph{Surgery on compact manifolds}, Academic Press, London, 1970.
+
+\bibitem{Wilkerson}
+C.~W. Wilkerson, \emph{Applications of minimal simplicial groups}, Topology \textbf{15} (1976), 111--130.
+
+\bibitem{WilkersonGenus}
+C.~W. Wilkerson, \emph{Genus and cancellation}, Topology \textbf{14} (1975), 29--36.
+
+\bibitem{Wood1}
+J. Wood, \emph{Removing handles from non-singular algebraic hypersurfaces in $\mathbf{CP}_{n+1}$}, Invent. Math. \textbf{31} (1975), 1--6.
+
+\bibitem{Wood2}
+J. Wood, \emph{Complete intersections as branched covers and the Kervaire invariant}, Math. Ann. \textbf{240} (1979), 223--230.
+
+\end{thebibliography}
+
+\end{document}
